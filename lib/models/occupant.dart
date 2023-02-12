@@ -14,7 +14,7 @@ class Occupant {
   List<Payment> payments = [];
   double deposit;
   double rentAdvance;
-  List<dynamic> docNames = [];
+  List<dynamic> docsNames = [];
 
   Occupant(
       {required this.id,
@@ -60,7 +60,7 @@ class Occupant {
       'advanceRent': rentAdvance,
       'entryDate': entryDate.toIso8601String(),
       'releaseDate': releaseDate?.toIso8601String(),
-      "imagesNames": jsonEncode(docNames)
+      "docsNames": jsonEncode(docsNames)
     };
   }
 
@@ -80,5 +80,5 @@ class Occupant {
         releaseDate = map['releaseDate'] != null
             ? DateTime.parse(map['releaseDate'])
             : null,
-        docNames = jsonDecode(map['imagesNames']).toList();
+        docsNames = jsonDecode(map['docsNames']).toList();
 }

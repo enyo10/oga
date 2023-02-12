@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           // backgroundColor: const Color(0xeee1f5fe),
           scaffoldBackgroundColor: const Color(0xEEE1F5FE),
-          primarySwatch: Palette1.myLightBlue,
+          primarySwatch: OgaColors.myLightBlue,
           primaryColor: Colors.blue[900]),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
 

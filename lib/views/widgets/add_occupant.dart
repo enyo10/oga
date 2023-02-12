@@ -35,6 +35,10 @@ class _AddOccupantState extends State<AddOccupant> {
       TextEditingController();
   final TextEditingController _advanceTextEditController =
       TextEditingController();
+  final TextEditingController _emailTextEditController =
+      TextEditingController();
+  final TextEditingController _phoneNumberTextEditController =
+      TextEditingController();
 
   String date = "";
   DateTime selectedDate = DateTime.now();
@@ -74,11 +78,12 @@ class _AddOccupantState extends State<AddOccupant> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           centerTitle: true,
+          elevation: 0,
           title: Text(
             appBarText,
             style: const TextStyle(
-              fontSize: 24,
-              color: Palette1.myLightBlue,
+              fontSize: 20,
+              color: OgaColors.myLightBlue,
             ),
           ),
           backgroundColor: Colors.white,
@@ -135,6 +140,30 @@ class _AddOccupantState extends State<AddOccupant> {
                           border: OutlineInputBorder(),
                           hintText: 'Prénom du locataire',
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _phoneNumberTextEditController,
+                        decoration: const InputDecoration(
+                          labelText: 'Téléphone',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (String value) => setState(() {}),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _emailTextEditController,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (String value) => setState(() {}),
                       ),
                     ),
                     Padding(
@@ -270,7 +299,7 @@ class _AddOccupantState extends State<AddOccupant> {
 
           try {
             await storage.ref().child("documents/$docName").putFile(file);
-            _occupant?.docNames.add(docName);
+            _occupant?.docsNames.add(docName);
           } on FirebaseException catch (error) {
             if (kDebugMode) {
               print(error);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Palette1 {
+class OgaColors {
   static const MaterialColor myLightBlue = MaterialColor(
   //  _lightBluePrimaryValue,
     _h,
