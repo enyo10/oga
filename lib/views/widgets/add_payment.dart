@@ -308,13 +308,12 @@ class _AddPaymentState extends State<AddPayment> {
     }
   }
 
-
-
   _onRemoveImage(int index) {
     setState(() {
       _files.removeAt(index);
     });
   }
+
   _updateImageFromFiles() {
     _imagesItems.clear();
     if (_files.isNotEmpty) {
@@ -331,6 +330,7 @@ class _AddPaymentState extends State<AddPayment> {
       }
     }
   }
+
   Future<void> _addPayment(BuildContext context) async {
     showCircularProgressIndicatorDialog(context);
 
@@ -423,7 +423,6 @@ class _AddPaymentState extends State<AddPayment> {
       if (value != null) {
         var name = basename(value.path);
         print(" image name $name");
-
         setState(() {
           _files.add(value);
         });

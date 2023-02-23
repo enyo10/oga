@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:oga/helper/palette_colors.dart';
+import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/apartment.dart';
 import 'package:oga/models/occupant.dart';
 import 'package:path/path.dart' as path;
@@ -77,7 +77,7 @@ class _AddOccupantState extends State<AddOccupant> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          centerTitle: true,
+          centerTitle: false,
           elevation: 0,
           title: Text(
             appBarText,
@@ -86,7 +86,8 @@ class _AddOccupantState extends State<AddOccupant> {
               color: OgaColors.myLightBlue,
             ),
           ),
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           actions: [
             IconButton(
               color: Colors.blueAccent,
@@ -276,6 +277,8 @@ class _AddOccupantState extends State<AddOccupant> {
     } else {
       String firstname = _firstnameTextController.text;
       String lastname = _lastnameTextEditController.text;
+      String email = _emailTextEditController.text;
+      String phone = _phoneNumberTextEditController.text;
       double deposit = double.parse(_depositTextEditController.text);
       double rentAdvance = double.parse(_advanceTextEditController.text);
       var apartmentId = widget.apartment.id;
@@ -289,8 +292,8 @@ class _AddOccupantState extends State<AddOccupant> {
           entryDate: selectedDate,
           rentAdvance: rentAdvance,
           deposit: deposit,
-          phoneNumber: '',
-          email: '');
+          phoneNumber: phone,
+          email: email);
       if (_files.isNotEmpty) {
         FirebaseStorage storage = FirebaseStorage.instance;
         for (XFile xFile in _files) {
@@ -298,7 +301,7 @@ class _AddOccupantState extends State<AddOccupant> {
           var docName = "doc${DateTime.now().hashCode}";
 
           try {
-            await storage.ref().child("documents/$docName").putFile(file);
+           await storage.ref().child("documents/$docName").putFile(file);
             _occupant?.docsNames.add(docName);
           } on FirebaseException catch (error) {
             if (kDebugMode) {

@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:oga/authentication/home_view.dart';
-import 'package:oga/authentication/login_view.dart';
-import 'package:oga/helper/helper.dart';
-import 'package:oga/views/screens/houses.dart';
 import 'auth/auth_gate.dart';
-import 'authentication/sign_up_view.dart';
 import 'firebase_options.dart';
-import 'helper/palette_colors.dart';
+import 'helper/oga_colors.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
