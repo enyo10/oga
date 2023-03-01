@@ -13,6 +13,7 @@ import '../../models/rent_period.dart';
 import '../widgets/apartement_screen_header.dart';
 import '../widgets/number_picker.dart';
 import 'occupants.dart';
+import 'occupant_details.dart';
 
 class ApartmentScreen extends StatefulWidget {
   const ApartmentScreen(
@@ -58,37 +59,43 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
               onPressed: () {
                 _search();
               },
-              icon: const Icon(Icons.search, color: Colors.red,),
+              icon: const Icon(
+                Icons.search,
+                color: Colors.red,
+              ),
             ),
-            Theme(
-              data: Theme.of(context).copyWith(
-                  textTheme: const TextTheme().apply(bodyColor: Colors.black),
-                  dividerColor: Colors.white,
-                  iconTheme: const IconThemeData(color: Colors.red)),
-              child: PopupMenuButton<int>(
-                color: Colors.black,
-                itemBuilder: (context) => [
-                  PopupMenuItem<int>(value: 0, child: Text(_itemValue)),
-                  const PopupMenuItem<int>(
-                      value: 1, child: Text("Liste des paiements")),
-                  const PopupMenuDivider(),
-                  PopupMenuItem<int>(
-                    value: 2,
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.date_range,
-                          color: Colors.red,
-                        ),
-                        SizedBox(
-                          width: 7,
-                        ),
-                        Text("Year")
-                      ],
+            Visibility(
+              visible: _isOccupied(),
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                    textTheme: const TextTheme().apply(bodyColor: Colors.black),
+                    dividerColor: Colors.white,
+                    iconTheme: const IconThemeData(color: Colors.red)),
+                child: PopupMenuButton<int>(
+                  color: Colors.black,
+                  itemBuilder: (context) => [
+                    PopupMenuItem<int>(value: 0, child: Text(_itemValue)),
+                    const PopupMenuItem<int>(
+                        value: 1, child: Text("Liste des paiements")),
+                    const PopupMenuDivider(),
+                    PopupMenuItem<int>(
+                      value: 2,
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.date_range,
+                            color: Colors.red,
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          Text("Year")
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-                onSelected: (item) => _selectedItem(context, item),
+                  ],
+                  onSelected: (item) => _selectedItem(context, item),
+                ),
               ),
             ),
           ],
@@ -204,8 +211,9 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                   children: [
                     GestureDetector(
                       onDoubleTap: () async {
+                        _navigateToOccupantDetails();
                         // _showRemoveOccupantDialog();
-                        await showModalBottomSheet(
+                      /*  await showModalBottomSheet(
                           context: context,
                           builder: (BuildContext bc) {
                             return AddOccupant(
@@ -218,7 +226,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40.0),
                           ),
-                        ).then((value) => setState(() {}));
+                        ).then((value) => setState(() {}));*/
                       },
                       child: ApartmentScreenHeader(
                         occupant: _occupant,
@@ -270,6 +278,15 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40.0),
+      ),
+    );
+  }
+
+  Future<void> _navigateToOccupantDetails() async {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) =>
+            OccupantDetails(occupant: _occupant!),
       ),
     );
   }
@@ -395,7 +412,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                   ),
                 ),
                 Visibility(
-                  // visible: _isVisible(index, payments),
+                  visible: _isVisible(index, payments),
                   child: icon,
                 )
               ],
@@ -404,6 +421,21 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
         ),
       ),
     );
+  }
+
+  bool _isVisible(int index, List<Payment> payments) {
+    var actualYear = DateTime.now();
+    var actualMonth = actualYear.month;
+
+    if (_year < actualYear.year) {
+      return true;
+    }
+
+    if (index < actualMonth || payments.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   bool _isOccupied() {
@@ -563,7 +595,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       ),
       context: context,
       builder: (context) {
-        return SizedBox(height: 400, child: PickedNumber(currentValue: _year));
+        return SizedBox(
+            height: 400,
+            child: PickedNumber(
+              currentValue: _year,
+              minValue: _occupant!.entryDate.year,
+            ));
       },
     ).then((value) {
       if (value != null) {

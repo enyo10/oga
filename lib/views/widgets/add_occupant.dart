@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -54,15 +55,18 @@ class _AddOccupantState extends State<AddOccupant> {
   void initState() {
     _apartment = widget.apartment;
     _occupant = widget.occupant;
-
+    if (_occupant != null) {
+      _updateData();
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     _updateImageFromFiles();
-    var appBarText = _hasOccupant ? "Rélisier bail" : "Ajouter occupant";
-    var buttonLabel = _hasOccupant ? "Résilier" : "Ajouter";
+    var appBarText = _hasOccupant ? "Actualiser occupant" : "Ajouter occupant";
+    var buttonLabel = _hasOccupant ? "Actualiser" : "Ajouter";
+
 
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -79,28 +83,43 @@ class _AddOccupantState extends State<AddOccupant> {
         appBar: AppBar(
           centerTitle: false,
           elevation: 0,
-          title: Text(
-            appBarText,
-            style: const TextStyle(
-              fontSize: 20,
-              color: OgaColors.myLightBlue,
-            ),
+          automaticallyImplyLeading: false,
+          title: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    appBarText,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: OgaColors.myLightBlue,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    color: Colors.blueAccent,
+                    onPressed: () async {
+                      await _showPicker(context);
+                    },
+                    icon: const Icon(Icons.photo_library),
+                  )
+                ],
+              )
+            ],
           ),
-          // backgroundColor: Colors.white,
           backgroundColor: Colors.transparent,
-          actions: [
-            IconButton(
-              color: Colors.blueAccent,
-              onPressed: () async {
-                await _showPicker(context);
-              },
-              icon: const Icon(Icons.photo_library),
-            )
-          ],
         ),
-        /* resizeToAvoidBottomInset: false,*/
+         resizeToAvoidBottomInset: true,
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 80),
+          padding: const EdgeInsets.symmetric(horizontal: 55),
           child: FloatingActionButton.extended(
             onPressed: () async {
               await _addOccupant();
@@ -110,15 +129,15 @@ class _AddOccupantState extends State<AddOccupant> {
             //   icon: const Icon(Icons.send),
             label: Text(
               buttonLabel,
-              style: const TextStyle(fontSize: 25),
+              style: const TextStyle(fontSize: 22),
             ),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(8.0),
-          child: !_hasOccupant
-              ? Column(
+        body: _occupant == null
+            ? SingleChildScrollView(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Padding(
@@ -232,27 +251,48 @@ class _AddOccupantState extends State<AddOccupant> {
                       ),
                     ),
                   ],
-                )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 100),
-                  child: SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            await _leaseTerminationDate();
-                          },
-                          child: const Text("Release date"),
-                        ),
-                        Text(stringValueOfDate(leaseDate)),
-                      ],
+                ))
+            : Column(
+                children: [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _phoneNumberTextEditController,
+                      decoration: const InputDecoration(
+                        labelText: 'Téléphone',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      onChanged: (String value) => setState(() {}),
                     ),
                   ),
-                ),
-        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _emailTextEditController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (String value) => setState(() {}),
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
+  }
+
+  void _updateData() {
+    Occupant occupant = _occupant!;
+    _firstnameTextController.text = occupant.firstname;
+    _lastnameTextEditController.text = occupant.lastname;
+    _phoneNumberTextEditController.text = occupant.phoneNumber;
+    _emailTextEditController.text = occupant.email;
   }
 
   Future<void> _addOccupant() async {
@@ -260,8 +300,7 @@ class _AddOccupantState extends State<AddOccupant> {
         FirebaseFirestore.instance.collection('occupants');
     var houseCollection = FirebaseFirestore.instance.collection('houses');
 
-    if (widget.occupant != null) {
-      for (int i = 0; i < widget.house.apartments.length; i++) {
+    /*for (int i = 0; i < widget.house.apartments.length; i++) {
         if (widget.house.apartments[i].occupantId == widget.occupant!.id) {
           widget.house.apartments[i].occupantId = null;
           widget.occupant!.releaseDate = leaseDate;
@@ -273,52 +312,56 @@ class _AddOccupantState extends State<AddOccupant> {
             _occupant = null;
           });
         }
-      }
-    } else {
-      String firstname = _firstnameTextController.text;
-      String lastname = _lastnameTextEditController.text;
-      String email = _emailTextEditController.text;
-      String phone = _phoneNumberTextEditController.text;
-      double deposit = double.parse(_depositTextEditController.text);
-      double rentAdvance = double.parse(_advanceTextEditController.text);
-      var apartmentId = widget.apartment.id;
+      }*/
 
-      var id = occupantCollection.doc().id;
-      _occupant = Occupant(
-          id: id,
-          apartmentId: apartmentId,
-          firstname: firstname,
-          lastname: lastname,
-          entryDate: selectedDate,
-          rentAdvance: rentAdvance,
-          deposit: deposit,
-          phoneNumber: phone,
-          email: email);
-      if (_files.isNotEmpty) {
-        FirebaseStorage storage = FirebaseStorage.instance;
-        for (XFile xFile in _files) {
-          var file = File(xFile.path);
-          var docName = "doc${DateTime.now().hashCode}";
+    String firstname = _firstnameTextController.text;
+    String lastname = _lastnameTextEditController.text;
+    String email = _emailTextEditController.text;
+    String phone = _phoneNumberTextEditController.text;
+    double deposit = double.parse(_depositTextEditController.text);
+    double rentAdvance = double.parse(_advanceTextEditController.text);
+    var apartmentId = widget.apartment.id;
 
-          try {
-           await storage.ref().child("documents/$docName").putFile(file);
-            _occupant?.docsNames.add(docName);
-          } on FirebaseException catch (error) {
-            if (kDebugMode) {
-              print(error);
-            }
+    var id = occupantCollection.doc().id;
+    _occupant = Occupant(
+        id: id,
+        apartmentId: apartmentId,
+        firstname: firstname,
+        lastname: lastname,
+        entryDate: selectedDate,
+        rentAdvance: rentAdvance,
+        deposit: deposit,
+        phoneNumber: phone,
+        email: email);
+    if (_files.isNotEmpty) {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      for (XFile xFile in _files) {
+        var file = File(xFile.path);
+        //  var docName = "doc${DateTime.now().hashCode}";
+        var docName = path.basename(file.path);
+        print(" document to add $docName");
+
+        try {
+          var currentUser = FirebaseAuth.instance.currentUser;
+
+          var fileStorage = storage.ref().child("${currentUser!.uid}/$docName");
+          await fileStorage.putFile(file);
+          _occupant?.docsNames.add(docName);
+        } on FirebaseException catch (error) {
+          if (kDebugMode) {
+            print(error);
           }
         }
       }
-
-      await occupantCollection.doc(id).set(_occupant!.toMap()).then((value) {
-        for (int i = 0; i < widget.house.apartments.length; i++) {
-          if (widget.house.apartments[i].id == widget.apartment.id) {
-            widget.house.apartments[i].occupantId = id;
-          }
-        }
-      });
     }
+
+    await occupantCollection.doc(id).set(_occupant!.toMap()).then((value) {
+      for (int i = 0; i < widget.house.apartments.length; i++) {
+        if (widget.house.apartments[i].id == widget.apartment.id) {
+          widget.house.apartments[i].occupantId = id;
+        }
+      }
+    });
 
     await houseCollection
         .doc(widget.house.id)
@@ -329,6 +372,9 @@ class _AddOccupantState extends State<AddOccupant> {
       showMessage(context, error.toString());
     });
   }
+
+  Future<void> _updateOccupantsCollection() async {}
+  Future<void> _updateHousesCollection() async {}
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
