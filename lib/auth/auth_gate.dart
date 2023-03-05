@@ -2,9 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:oga/views/screens/houses.dart';
-
 import '../helper/helper.dart';
-import 'home_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -39,10 +37,8 @@ class AuthGate extends StatelessWidget {
               },
             );
           }
-          print(" current user ${FirebaseAuth.instance.currentUser?.uid}");
           return const Houses(collectionName: kHouseCollection);
 
-          // return const HomeScreen();
         },
       ),
     );

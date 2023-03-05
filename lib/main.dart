@@ -25,13 +25,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '',
       theme: ThemeData(
-          // backgroundColor: const Color(0xeee1f5fe),
           scaffoldBackgroundColor: const Color(0xEEE1F5FE),
           primarySwatch: OgaColors.myLightBlue,
           primaryColor: Colors.blue[900]),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-
-      // home: const Houses(collectionName: kHouseCollection),
       home: const AuthGate(),
     );
   }

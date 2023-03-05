@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/house.dart';
 import 'package:oga/views/screens/data_list.dart';
 import 'package:oga/views/screens/apartments.dart';
@@ -28,11 +29,14 @@ class HousesState extends DataListScreenState<Houses> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.montserrat(
-            fontSize: 30, color: Colors.purple),
+        titleTextStyle:
+            GoogleFonts.montserrat(fontSize: 30, color: Colors.purple),
         actions: [
           IconButton(
-            icon: const Icon(Icons.person),
+            icon: Icon(
+              Icons.person,
+              color: OgaColors.blueButton,
+            ),
             onPressed: () {
               Navigator.push(
                 context,

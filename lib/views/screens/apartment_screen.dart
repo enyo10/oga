@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/apartment.dart';
 import 'package:oga/models/occupant.dart';
 import 'package:oga/views/screens/period_payments.dart';
@@ -28,13 +29,17 @@ class ApartmentScreen extends StatefulWidget {
 }
 
 class _ApartmentScreenState extends State<ApartmentScreen> {
+  CollectionReference occupants =
+      FirebaseFirestore.instance.collection('occupants');
   late List<Data> monthDataList;
   Occupant? _occupant;
   late int _year;
   DateTime? leaseDate;
+  late String? occupantId;
 
   @override
   void initState() {
+    occupantId = widget.apartment.occupantId;
     if (widget.year == null) {
       _year = DateTime.now().year;
     }
@@ -45,239 +50,238 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference occupants =
-        FirebaseFirestore.instance.collection('occupants');
     Rent rent = widget.apartment.getActualRent();
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                _search();
-              },
-              icon: const Icon(
-                Icons.search,
-                color: Colors.red,
-              ),
-            ),
-            Visibility(
-              visible: _isOccupied(),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                    textTheme: const TextTheme().apply(bodyColor: Colors.black),
-                    dividerColor: Colors.white,
-                    iconTheme: const IconThemeData(color: Colors.red)),
-                child: PopupMenuButton<int>(
-                  color: Colors.black,
-                  itemBuilder: (context) => [
-                    PopupMenuItem<int>(value: 0, child: Text(_itemValue)),
-                    const PopupMenuItem<int>(
-                        value: 1, child: Text("Liste des paiements")),
-                    const PopupMenuDivider(),
-                    PopupMenuItem<int>(
-                      value: 2,
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.date_range,
-                            color: Colors.red,
-                          ),
-                          SizedBox(
-                            width: 7,
-                          ),
-                          Text("Year")
-                        ],
+        body: Stack(
+          children: [
+            Scaffold(
+              appBar: occupantId == null
+                  ? AppBar(
+                      elevation: 0.0,
+                      backgroundColor: Colors.transparent,
+                    )
+                  : AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      leading: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: OgaColors.appbar,
+                        ),
                       ),
-                    ),
-                  ],
-                  onSelected: (item) => _selectedItem(context, item),
-                ),
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            _isOccupied()
-                ? await _addPayment(
-                    widget.apartment,
-                    _occupant!,
-                  ).then((value) => setState(() {}))
-                : await showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext bc) {
-                      return AddOccupant(
-                        apartment: widget.apartment,
-                        house: widget.house,
-                      );
-                    },
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40.0),
-                    ),
-                  ).then((value) => setState(() {
-                      _occupant = value;
-                    }));
-          },
-          child: const Icon(Icons.add),
-        ),
-        body: Card(
-          elevation: 1,
-          child: FutureBuilder<DocumentSnapshot>(
-            future: occupants.doc(widget.apartment.occupantId).get(),
-            builder: (BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Column(
-                  children: [
-                    Card(
-                      color: Colors.amberAccent,
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: const [
-                                Text(
-                                  "Nom:  ",
-                                  style: TextStyle(fontSize: 24),
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            _search();
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            color: OgaColors.blue1,
+                          ),
+                        ),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            textTheme: const TextTheme()
+                                .apply(bodyColor: Colors.black),
+                            dividerColor: Colors.white,
+                            iconTheme: IconThemeData(color: OgaColors.blue1),
+                          ),
+                          child: PopupMenuButton<int>(
+                            color: Colors.black,
+                            itemBuilder: (context) => [
+                              PopupMenuItem<int>(
+                                  value: 0, child: Text(_itemValue)),
+                              const PopupMenuItem<int>(
+                                  value: 1, child: Text("Liste des paiements")),
+                              const PopupMenuDivider(),
+                              PopupMenuItem<int>(
+                                value: 2,
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.date_range,
+                                      color: Colors.red,
+                                    ),
+                                    SizedBox(
+                                      width: 7,
+                                    ),
+                                    Text("Year")
+                                  ],
                                 ),
-                                Text(
-                                  "",
-                                  style: TextStyle(fontSize: 24),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: const [Text("Prenom: "), Text("")],
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Loyer: ",
-                                  style: TextStyle(fontSize: 30),
-                                ),
-                                Text(
-                                  "${rent.value}",
-                                  style: const TextStyle(fontSize: 30),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    const Expanded(
-                      child: Card(
-                        child: Center(
-                          child: Text("Something went wrong"),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-
-              if (snapshot.hasData && !snapshot.data!.exists) {
-                _occupant = null;
-                return Column(
-                  children: [
-                    ApartmentScreenHeader(occupant: _occupant, rent: rent),
-                    const Expanded(
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Appartement vide",
-                            style: TextStyle(fontSize: 30),
+                              ),
+                            ],
+                            onSelected: (item) => _selectedItem(context, item),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                );
-              }
-
-              if (snapshot.connectionState == ConnectionState.done) {
-                Map<String, dynamic> data =
-                    snapshot.data!.data() as Map<String, dynamic>;
-                _occupant = Occupant.fromMap(data);
-                _loadPayments();
-
-                return Column(
-                  children: [
-                    GestureDetector(
-                      onDoubleTap: () async {
-                        _navigateToOccupantDetails();
-                        // _showRemoveOccupantDialog();
-                      /*  await showModalBottomSheet(
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async {
+                  _isApartmentOccupied()
+                      ? await _addPayment(
+                          widget.apartment,
+                          _occupant!,
+                        ).then((value) => setState(() {}))
+                      : await showModalBottomSheet(
                           context: context,
                           builder: (BuildContext bc) {
                             return AddOccupant(
                               apartment: widget.apartment,
                               house: widget.house,
-                              occupant: _occupant,
                             );
                           },
                           isScrollControlled: true,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40.0),
                           ),
-                        ).then((value) => setState(() {}));*/
-                      },
-                      child: ApartmentScreenHeader(
-                        occupant: _occupant,
-                        rent: rent,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      child: Text(
-                        "Status des payements de $_year",
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.indigo),
-                      ),
-                    ),
-                    Expanded(
-                      child: Card(
-                        child: ListView.builder(
-                          itemCount: monthDataList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return _monthDataWidget(index);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
+                        ).then(
+                          (value) => setState(() {
+                            _occupant = value;
+                          }),
+                        );
+                },
+                child: const Icon(Icons.add),
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: FutureBuilder<DocumentSnapshot>(
+                  future: occupants.doc(widget.apartment.occupantId).get(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Column(
+                        children: [
+                          Card(
+                            color: Colors.amberAccent,
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: const [
+                                      Text(
+                                        "Nom:  ",
+                                        style: TextStyle(fontSize: 24),
+                                      ),
+                                      Text(
+                                        "",
+                                        style: TextStyle(fontSize: 24),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Text("Prenom: "),
+                                      Text("")
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Loyer: ",
+                                        style: TextStyle(fontSize: 30),
+                                      ),
+                                      Text(
+                                        "${rent.value}",
+                                        style: const TextStyle(fontSize: 30),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Expanded(
+                            child: Card(
+                              child: Center(
+                                child: Text("Something went wrong"),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
 
-              return const Center(child: Text("loading"));
-            },
-          ),
+                    if (snapshot.hasData && !snapshot.data!.exists) {
+                      _occupant = null;
+                      return Column(
+                        children: [
+                          ApartmentScreenHeader(
+                              occupant: _occupant, rent: rent),
+                          const Expanded(
+                            child: Card(
+                              child: Center(
+                                child: Text(
+                                  "Appartement vide",
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      Map<String, dynamic> data =
+                          snapshot.data!.data() as Map<String, dynamic>;
+                      _occupant = Occupant.fromMap(data);
+
+                      _loadPayments();
+
+                      return Column(
+                        children: [
+                          GestureDetector(
+                            onDoubleTap: () async {
+                              _navigateToOccupantDetails();
+                            },
+                            child: ApartmentScreenHeader(
+                              occupant: _occupant,
+                              rent: rent,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  "Status des payements de $_year",
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.indigo),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Card(
+                              child: ListView.builder(
+                                itemCount: monthDataList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return _monthDataWidget(index);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return const Center(child: Text("loading"));
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-
-  Future<void> _navigateToAddOccupant() async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (BuildContext bc) {
-        return AddOccupant(
-          apartment: widget.apartment,
-          house: widget.house,
-        );
-      },
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(40.0),
       ),
     );
   }
@@ -438,7 +442,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     }
   }
 
-  bool _isOccupied() {
+  bool _isApartmentOccupied() {
     return _occupant != null;
   }
 
@@ -584,7 +588,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   }
 
   String get _itemValue =>
-      _isOccupied() ? "Résilier bail " : "Ajouter locataire";
+      _isApartmentOccupied() ? "Résilier bail " : "Ajouter locataire";
 
   Future<void> _selectYear() async {
     await showModalBottomSheet(

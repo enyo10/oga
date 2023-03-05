@@ -30,7 +30,10 @@ class _HouseScreenState extends State<HouseScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Les appartements", style: TextStyle(fontSize: 25),),
+        title: const Text(
+          "Les appartements",
+          style: TextStyle(fontSize: 25),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

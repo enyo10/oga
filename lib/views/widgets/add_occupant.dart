@@ -67,7 +67,6 @@ class _AddOccupantState extends State<AddOccupant> {
     var appBarText = _hasOccupant ? "Actualiser occupant" : "Ajouter occupant";
     var buttonLabel = _hasOccupant ? "Actualiser" : "Ajouter";
 
-
     return Container(
       padding: const EdgeInsets.all(20.0),
       height: MediaQuery.of(context).size.height * 0.90,
@@ -117,7 +116,7 @@ class _AddOccupantState extends State<AddOccupant> {
           ),
           backgroundColor: Colors.transparent,
         ),
-         resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: true,
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 55),
           child: FloatingActionButton.extended(
@@ -295,65 +294,12 @@ class _AddOccupantState extends State<AddOccupant> {
     _emailTextEditController.text = occupant.email;
   }
 
-  Future<void> _addOccupant() async {
+  _saveOccupant(Occupant occupant) async {
+    var houseCollection = FirebaseFirestore.instance.collection('houses');
     CollectionReference occupantCollection =
         FirebaseFirestore.instance.collection('occupants');
-    var houseCollection = FirebaseFirestore.instance.collection('houses');
 
-    /*for (int i = 0; i < widget.house.apartments.length; i++) {
-        if (widget.house.apartments[i].occupantId == widget.occupant!.id) {
-          widget.house.apartments[i].occupantId = null;
-          widget.occupant!.releaseDate = leaseDate;
-
-          await occupantCollection
-              .doc(widget.occupant!.id)
-              .update(widget.occupant!.toMap())
-              .then((value) {
-            _occupant = null;
-          });
-        }
-      }*/
-
-    String firstname = _firstnameTextController.text;
-    String lastname = _lastnameTextEditController.text;
-    String email = _emailTextEditController.text;
-    String phone = _phoneNumberTextEditController.text;
-    double deposit = double.parse(_depositTextEditController.text);
-    double rentAdvance = double.parse(_advanceTextEditController.text);
-    var apartmentId = widget.apartment.id;
-
-    var id = occupantCollection.doc().id;
-    _occupant = Occupant(
-        id: id,
-        apartmentId: apartmentId,
-        firstname: firstname,
-        lastname: lastname,
-        entryDate: selectedDate,
-        rentAdvance: rentAdvance,
-        deposit: deposit,
-        phoneNumber: phone,
-        email: email);
-    if (_files.isNotEmpty) {
-      FirebaseStorage storage = FirebaseStorage.instance;
-      for (XFile xFile in _files) {
-        var file = File(xFile.path);
-        //  var docName = "doc${DateTime.now().hashCode}";
-        var docName = path.basename(file.path);
-        print(" document to add $docName");
-
-        try {
-          var currentUser = FirebaseAuth.instance.currentUser;
-
-          var fileStorage = storage.ref().child("${currentUser!.uid}/$docName");
-          await fileStorage.putFile(file);
-          _occupant?.docsNames.add(docName);
-        } on FirebaseException catch (error) {
-          if (kDebugMode) {
-            print(error);
-          }
-        }
-      }
-    }
+    var id = occupant.id;
 
     await occupantCollection.doc(id).set(_occupant!.toMap()).then((value) {
       for (int i = 0; i < widget.house.apartments.length; i++) {
@@ -373,8 +319,120 @@ class _AddOccupantState extends State<AddOccupant> {
     });
   }
 
-  Future<void> _updateOccupantsCollection() async {}
-  Future<void> _updateHousesCollection() async {}
+  Occupant _createOccupant() {
+    CollectionReference occupantCollection =
+        FirebaseFirestore.instance.collection('occupants');
+
+    String firstname = _firstnameTextController.text;
+    String lastname = _lastnameTextEditController.text;
+    String email = _emailTextEditController.text;
+    String phone = _phoneNumberTextEditController.text;
+    double deposit = double.parse(_depositTextEditController.text);
+    double rentAdvance = double.parse(_advanceTextEditController.text);
+    var apartmentId = widget.apartment.id;
+
+    var id = occupantCollection.doc().id;
+    return Occupant(
+        id: id,
+        apartmentId: apartmentId,
+        firstname: firstname,
+        lastname: lastname,
+        entryDate: selectedDate,
+        rentAdvance: rentAdvance,
+        deposit: deposit,
+        phoneNumber: phone,
+        email: email);
+  }
+
+  Future<void> _addOccupant() async {
+    /* CollectionReference occupantCollection =
+        FirebaseFirestore.instance.collection('occupants');
+
+
+    String firstname = _firstnameTextController.text;
+    String lastname = _lastnameTextEditController.text;
+    String email = _emailTextEditController.text;
+    String phone = _phoneNumberTextEditController.text;
+    double deposit = double.parse(_depositTextEditController.text);
+    double rentAdvance = double.parse(_advanceTextEditController.text);
+    var apartmentId = widget.apartment.id;
+
+    var id = occupantCollection.doc().id;
+    _occupant = Occupant(
+        id: id,
+        apartmentId: apartmentId,
+        firstname: firstname,
+        lastname: lastname,
+        entryDate: selectedDate,
+        rentAdvance: rentAdvance,
+        deposit: deposit,
+        phoneNumber: phone,
+        email: email);*/
+    var occupant = _createOccupant();
+
+    if (_files.isNotEmpty) {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      for (XFile xFile in _files) {
+        var file = File(xFile.path);
+
+        var docName = path.basename(file.path);
+
+        try {
+          var currentUser = FirebaseAuth.instance.currentUser;
+
+          var fileStorage = storage.ref().child("${currentUser!.uid}/$docName");
+          await fileStorage.putFile(file);
+          occupant.docsNames.add(docName);
+        } on FirebaseException catch (error) {
+          if (kDebugMode) {
+            print(error);
+          }
+        }
+      }
+      _occupant = occupant;
+      _saveOccupant(_occupant!);
+    } else {
+      await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const Text(" Vous n'avez pas ajouté le contrat"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                  child: const Text('Annuler'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('Enregistrer'),
+                ),
+              ],
+            );
+          }).then((value) {
+        if (value == 'OK') {
+          _occupant = occupant;
+          _saveOccupant(_occupant!);
+        }
+      });
+    }
+    /*var houseCollection = FirebaseFirestore.instance.collection('houses');
+    await occupantCollection.doc(id).set(_occupant!.toMap()).then((value) {
+      for (int i = 0; i < widget.house.apartments.length; i++) {
+        if (widget.house.apartments[i].id == widget.apartment.id) {
+          widget.house.apartments[i].occupantId = id;
+        }
+      }
+    });
+
+    await houseCollection
+        .doc(widget.house.id)
+        .update(widget.house.toMap())
+        .then((value) {
+      showMessage(context, "Modification success");
+    }).onError((error, stackTrace) {
+      showMessage(context, error.toString());
+    });*/
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(

@@ -6,6 +6,7 @@ import 'package:oga/authentication/sign_up_view.dart';
 
 import 'home_view.dart';
 
+/*
 class LoginView extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -135,3 +136,4 @@ class _CreateAccountButton extends StatelessWidget {
     );
   }
 }
+*/

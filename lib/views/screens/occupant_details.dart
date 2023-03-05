@@ -16,7 +16,7 @@ class OccupantDetails extends StatefulWidget {
 }
 
 class _OccupantDetailsState extends State<OccupantDetails> {
-  late List<String> urls;
+  List<String> urls=[];
   @override
   void initState() {
     getUrls().then((value) => urls = value);

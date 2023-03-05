@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'home_view.dart';
 
+/*
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
 
@@ -123,3 +124,4 @@ class _SubmitButton extends StatelessWidget {
     );
   }
 }
+*/
