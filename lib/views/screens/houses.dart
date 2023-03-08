@@ -10,6 +10,8 @@ import 'package:oga/views/screens/data_list.dart';
 import 'package:oga/views/screens/apartments.dart';
 import 'package:oga/views/widgets/add_house.dart';
 
+import '../widgets/oga_scaffold.dart';
+
 class Houses extends DataListScreen {
   const Houses({super.key, required super.collectionName});
 
@@ -20,17 +22,20 @@ class Houses extends DataListScreen {
 class HousesState extends DataListScreenState<Houses> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return OgaScaffold(
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.symmetric(vertical: 20),
-          child: Text("Les maisons"),
+          child: Text(
+            "Les maisons",
+            //style: TextStyle(color: OgaColors.grey2),
+          ),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
         titleTextStyle:
-            GoogleFonts.montserrat(fontSize: 30, color: Colors.purple),
+            GoogleFonts.montserrat(fontSize: 30, color: OgaColors.grey2),
         actions: [
           IconButton(
             icon: Icon(
@@ -124,7 +129,7 @@ class HousesState extends DataListScreenState<Houses> {
                 var id = document.id;
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                print("Data ----${data.toString()}");
+
                 House house = House.fromMap(data, document.id);
 
                 return Card(
@@ -166,6 +171,7 @@ class HousesState extends DataListScreenState<Houses> {
           );
         },
       ),
+      resizeToAvoidBottomInset: false,
     );
   }
 }

@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/views/screens/apartment_screen.dart';
 import 'package:oga/views/widgets/add_apartment.dart';
+import '../../helper/oga_colors.dart';
 import '../../models/house.dart';
 import '../../models/occupant.dart';
+import '../widgets/oga_scaffold.dart';
 
 class HouseScreen extends StatefulWidget {
   const HouseScreen({Key? key, required this.house}) : super(key: key);
@@ -27,12 +30,16 @@ class _HouseScreenState extends State<HouseScreen> {
   Widget build(BuildContext context) {
     var count = _house.apartments.length;
 
-    return Scaffold(
+    return OgaScaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         centerTitle: true,
-        title: const Text(
+        titleTextStyle:
+        GoogleFonts.montserrat(fontSize: 30, color: OgaColors.grey2),
+        title: Text(
           "Les appartements",
-          style: TextStyle(fontSize: 25),
+          style: TextStyle(color: OgaColors.grey2),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -136,7 +143,7 @@ class _HouseScreenState extends State<HouseScreen> {
                   );
                 },
               ),
-      ),
+      ), resizeToAvoidBottomInset: true,
     );
   }
 

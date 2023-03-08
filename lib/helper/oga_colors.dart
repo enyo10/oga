@@ -19,7 +19,7 @@ class OgaColors {
     },
   );
   static const int _h =0xFF0d47a1;
-
+static Color other = const Color(0xFE1b3752 );
   static Color replaceBackgroundBlurBlack =
   const Color.fromRGBO(29, 31, 31, 0.8);
   static Color replaceBackgroundBlurBlue =
@@ -66,4 +66,6 @@ class OgaColors {
   static Color receivedGreen = const Color.fromRGBO(0x00, 0xDE, 0x59, 1);
   static Color successGreen = const Color.fromRGBO(0x00, 0xFF, 0x29, 1);
   static Color errorRed = const Color.fromRGBO(0xFB, 0x2C, 0x2C, 1);
+  static Color bleu3 = const Color(0xFF016DFD);
+
 }

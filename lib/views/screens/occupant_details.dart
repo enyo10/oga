@@ -3,9 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../helper/helper.dart';
+import '../../helper/oga_colors.dart';
 import '../../models/occupant.dart';
+import '../widgets/oga_scaffold.dart';
 
 class OccupantDetails extends StatefulWidget {
   const OccupantDetails({Key? key, required this.occupant}) : super(key: key);
@@ -16,58 +19,74 @@ class OccupantDetails extends StatefulWidget {
 }
 
 class _OccupantDetailsState extends State<OccupantDetails> {
-  List<String> urls=[];
+  List<String> urls = [];
   @override
   void initState() {
     getUrls().then((value) => urls = value);
-    print("url size ${urls.length}");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(),
+      child: OgaScaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Locataire info"),
+          titleTextStyle:
+              GoogleFonts.montserrat(fontSize: 30, color: OgaColors.grey2),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
               height: 40,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(widget.occupant.firstname),
-                const SizedBox(
-                  width: 10,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                color: OgaColors.grey2 ,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(widget.occupant.firstname,),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(widget.occupant.lastname)
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(widget.occupant.email),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Text(widget.occupant.phoneNumber)],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Caution:"),
+                        Text(widget.occupant.deposit.toString()),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Avance:"),
+                        Text(widget.occupant.rentAdvance.toString())
+                      ],
+                    ),
+                  ],
                 ),
-                Text(widget.occupant.lastname)
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(widget.occupant.email),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text(widget.occupant.phoneNumber)],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Caution:"),
-                Text(widget.occupant.deposit.toString()),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Avance:"),
-                Text(widget.occupant.rentAdvance.toString())
-              ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -84,6 +103,7 @@ class _OccupantDetailsState extends State<OccupantDetails> {
             )
           ],
         ),
+        resizeToAvoidBottomInset: true,
       ),
     );
   }
