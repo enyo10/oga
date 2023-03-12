@@ -60,6 +60,16 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
               ? AppBar(
                   elevation: 0.0,
                   backgroundColor: Colors.transparent,
+            leading:  IconButton(
+              onPressed: () {
+             Navigator.of(context).pop();
+
+    },
+      icon: Icon(
+        Icons.arrow_back,
+        color: OgaColors.blueButton,
+      ),
+    ),
                 )
               : AppBar(
                   backgroundColor: Colors.transparent,
@@ -67,10 +77,11 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                   leading: IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();
+
                     },
                     icon: Icon(
                       Icons.arrow_back,
-                      color: OgaColors.grey1,
+                      color: OgaColors.blueButton,
                     ),
                   ),
                   actions: [
@@ -80,7 +91,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                       },
                       icon: Icon(
                         Icons.search,
-                        color: OgaColors.grey1,
+                        color: OgaColors.blueButton,
                       ),
                     ),
                     Theme(
@@ -88,7 +99,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                         textTheme: const TextTheme()
                             .apply(bodyColor: Colors.black),
                         dividerColor: Colors.white,
-                        iconTheme: IconThemeData(color: OgaColors.grey1),
+                        iconTheme: IconThemeData(color: OgaColors.blueButton),
                       ),
                       child: PopupMenuButton<int>(
                         color: OgaColors.replaceBackgroundBlurBlack,
@@ -255,21 +266,19 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                             Container(
                               margin: const EdgeInsets.only(bottom: 20.0),
                               child: Text(
-                                "Status des payements de $_year",
+                                "Situation en $_year",
                                 style: TextStyle(
-                                    fontSize: 20, color: OgaColors.grey1),
+                                    fontSize: 20, color: OgaColors.blueButton),
                               ),
                             ),
                           ],
                         ),
                         Expanded(
-                          child: Card(
-                            child: ListView.builder(
-                              itemCount: monthDataList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return _monthDataWidget(index);
-                              },
-                            ),
+                          child: ListView.builder(
+                            itemCount: monthDataList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return _monthDataWidget(index);
+                            },
                           ),
                         ),
                       ],

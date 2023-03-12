@@ -27,7 +27,7 @@ class HousesState extends DataListScreenState<Houses> {
         title: const Padding(
           padding: EdgeInsets.symmetric(vertical: 20),
           child: Text(
-            "Les maisons",
+            "Maisons",
             //style: TextStyle(color: OgaColors.grey2),
           ),
         ),
@@ -35,7 +35,7 @@ class HousesState extends DataListScreenState<Houses> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         titleTextStyle:
-            GoogleFonts.montserrat(fontSize: 30, color: OgaColors.grey2),
+            GoogleFonts.montserrat(fontSize: 30, color: OgaColors.blueButton),
         actions: [
           IconButton(
             icon: Icon(

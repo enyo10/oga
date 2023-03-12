@@ -58,7 +58,7 @@ dependencies:
   firebase_auth: ^3.3.11
   firebase_core: ^1.13.1
   flutterfire_ui: ^0.4.3+14
-  url_launcher: ^6.1.9
+  url_launcher: ^6.1.10
   background_sms: ^0.0.4
   flutter_sms: ^2.3.3
   document_scanner_flutter: ^0.2.7

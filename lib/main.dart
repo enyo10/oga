@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           scaffoldBackgroundColor: const Color(0xEEE1F5FE),
           primarySwatch: OgaColors.myLightBlue,
-          primaryColor: Colors.blue[900]),
+          primaryColor: Colors.blue[100]),
       home: const AuthGate(),
     );
   }

@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class ImageItem extends StatelessWidget {
   final File file;
@@ -28,12 +30,8 @@ class ImageItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.file(
-            file,
-            width: 100,
-            height: 100,
-            fit: BoxFit.fitHeight,
-          ),
+          Text(basename(file.path)),
+
           InkWell(
             onDoubleTap: onDeleteItem,
             child: const Icon(Icons.delete),

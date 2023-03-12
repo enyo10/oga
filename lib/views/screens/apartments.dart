@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/views/screens/apartment_screen.dart';
 import 'package:oga/views/widgets/add_apartment.dart';
 import '../../helper/oga_colors.dart';
+import '../../helper/oga_style.dart';
 import '../../models/house.dart';
 import '../../models/occupant.dart';
 import '../widgets/oga_scaffold.dart';
@@ -35,11 +36,12 @@ class _HouseScreenState extends State<HouseScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle:
-        GoogleFonts.montserrat(fontSize: 30, color: OgaColors.grey2),
-        title: Text(
-          "Les appartements",
-          style: TextStyle(color: OgaColors.grey2),
+        titleTextStyle: appBarTitleTextStyle,
+        leading: IconButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, icon: Icon(Icons.arrow_back, color: OgaColors.blueButton)),
+        title: const Text(
+          "Appartements",
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -143,7 +145,8 @@ class _HouseScreenState extends State<HouseScreen> {
                   );
                 },
               ),
-      ), resizeToAvoidBottomInset: true,
+      ),
+      resizeToAvoidBottomInset: true,
     );
   }
 

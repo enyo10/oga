@@ -1,4 +1,7 @@
+import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:document_scanner_flutter/configs/configs.dart';
+import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -51,6 +54,10 @@ class _AddOccupantState extends State<AddOccupant> {
   final List<dynamic> _imagesItems = [];
   final ImagePicker _imagePicker = ImagePicker();
 
+  PDFDocument? _scannedDocument;
+  File? _scannedDocumentFile;
+  File? _scannedImage;
+
   @override
   void initState() {
     _apartment = widget.apartment;
@@ -63,7 +70,7 @@ class _AddOccupantState extends State<AddOccupant> {
 
   @override
   Widget build(BuildContext context) {
-    _updateImageFromFiles();
+    //_updateImageFromFiles();
     var appBarText = _hasOccupant ? "Actualiser occupant" : "Ajouter occupant";
     var buttonLabel = _hasOccupant ? "Actualiser" : "Ajouter";
 
@@ -330,8 +337,8 @@ class _AddOccupantState extends State<AddOccupant> {
     double deposit = double.parse(_depositTextEditController.text);
     double rentAdvance = double.parse(_advanceTextEditController.text);
     var apartmentId = widget.apartment.id;
-
     var id = occupantCollection.doc().id;
+
     return Occupant(
         id: id,
         apartmentId: apartmentId,
@@ -345,29 +352,6 @@ class _AddOccupantState extends State<AddOccupant> {
   }
 
   Future<void> _addOccupant() async {
-    /* CollectionReference occupantCollection =
-        FirebaseFirestore.instance.collection('occupants');
-
-
-    String firstname = _firstnameTextController.text;
-    String lastname = _lastnameTextEditController.text;
-    String email = _emailTextEditController.text;
-    String phone = _phoneNumberTextEditController.text;
-    double deposit = double.parse(_depositTextEditController.text);
-    double rentAdvance = double.parse(_advanceTextEditController.text);
-    var apartmentId = widget.apartment.id;
-
-    var id = occupantCollection.doc().id;
-    _occupant = Occupant(
-        id: id,
-        apartmentId: apartmentId,
-        firstname: firstname,
-        lastname: lastname,
-        entryDate: selectedDate,
-        rentAdvance: rentAdvance,
-        deposit: deposit,
-        phoneNumber: phone,
-        email: email);*/
     var occupant = _createOccupant();
 
     if (_files.isNotEmpty) {
@@ -415,23 +399,6 @@ class _AddOccupantState extends State<AddOccupant> {
         }
       });
     }
-    /*var houseCollection = FirebaseFirestore.instance.collection('houses');
-    await occupantCollection.doc(id).set(_occupant!.toMap()).then((value) {
-      for (int i = 0; i < widget.house.apartments.length; i++) {
-        if (widget.house.apartments[i].id == widget.apartment.id) {
-          widget.house.apartments[i].occupantId = id;
-        }
-      }
-    });
-
-    await houseCollection
-        .doc(widget.house.id)
-        .update(widget.house.toMap())
-        .then((value) {
-      showMessage(context, "Modification success");
-    }).onError((error, stackTrace) {
-      showMessage(context, error.toString());
-    });*/
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -474,41 +441,43 @@ class _AddOccupantState extends State<AddOccupant> {
             child: Wrap(
               children: <Widget>[
                 ListTile(
-                  leading: const Icon(Icons.photo_library),
-                  title: const Text('Photo Library'),
+                  leading: const Icon(Icons.picture_as_pdf),
+                  title: const Text('Ajouter un PDF'),
                   onTap: () async {
-                    await _chooseImage(ImageSource.gallery).then((value) {
+                    _openPdfScanner(context);
+                    /*await _chooseImage(ImageSource.gallery).then((value) {
                       Navigator.of(context).pop();
-                    });
+                    });*/
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.photo_camera),
-                  title: const Text('Camera'),
-                  onTap: () async {
-                    await _chooseImage(ImageSource.camera).then((value) {
-                      Navigator.of(context).pop();
-                    });
+                Builder(
+                  builder: (context) {
+                    return ListTile(
+                      onTap: () => _openImageScanner(context),
+                      leading: const Icon(Icons.image),
+                      title: const Text('Image'),
+                    );
                   },
-                ),
+                )
+
+                /* await _chooseImage(ImageSource.camera).then((value) {
+                      Navigator.of(context).pop();
+                    });*/
               ],
             ),
           );
         });
   }
 
-  Future<void> _chooseImage(ImageSource imageSource) async {
+  /* Future<void> _chooseImage(ImageSource imageSource) async {
     await _imagePicker.pickImage(source: imageSource).then((value) {
       if (value != null) {
-        var name = path.basename(value.path);
-        print(" image name $name");
-
         setState(() {
           _files.add(value);
         });
       }
     });
-  }
+  }*/
 
   _onRemoveImage(int index) {
     setState(() {
@@ -516,7 +485,7 @@ class _AddOccupantState extends State<AddOccupant> {
     });
   }
 
-  _updateImageFromFiles() {
+  /*_updateImageFromFiles() {
     _imagesItems.clear();
     if (_files.isNotEmpty) {
       for (int i = 0; i < _files.length; i++) {
@@ -530,6 +499,42 @@ class _AddOccupantState extends State<AddOccupant> {
           ),
         );
       }
+    }
+  }*/
+
+  _openPdfScanner(BuildContext context) async {
+    var doc = await DocumentScannerFlutter.launchForPdf(
+      context,
+      labelsConfig: {
+        ScannerLabelsConfig.ANDROID_NEXT_BUTTON_LABEL: "Continuer",
+        ScannerLabelsConfig.PDF_GALLERY_FILLED_TITLE_SINGLE: "Only 1 Page",
+        ScannerLabelsConfig.PDF_GALLERY_FILLED_TITLE_MULTIPLE:
+            "Only {PAGES_COUNT} Page"
+      },
+      // source: ScannerFileSource.CAMERA
+    );
+    if (doc != null) {
+      _scannedDocument = null;
+      setState(() {});
+      await Future.delayed(const Duration(milliseconds: 100));
+      _scannedDocumentFile = doc;
+      _scannedDocument = await PDFDocument.fromFile(doc);
+      _imagesItems.add(_scannedDocument);
+      setState(() {});
+    }
+  }
+
+  _openImageScanner(BuildContext context) async {
+    var image = await DocumentScannerFlutter.launch(context,
+        // source: ScannerFileSource.CAMERA,
+        labelsConfig: {
+          ScannerLabelsConfig.ANDROID_NEXT_BUTTON_LABEL: "Continuer",
+          ScannerLabelsConfig.ANDROID_OK_LABEL: "OK"
+        });
+    if (image != null) {
+      //  _scannedImage = image;
+      _imagesItems.add(ImageItem(file: image, onDeleteItem: () {}));
+      setState(() {});
     }
   }
 }
