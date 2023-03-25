@@ -122,11 +122,54 @@ class HousesState extends DataListScreenState<Houses> {
             );
           }
 
+          var houses = snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data =
+                document.data()! as Map<String, dynamic>;
+            House house = House.fromMap(data, document.id);
+            return house;
+          }).toList();
+          houses.sort((a, b) => a.name.compareTo(b.name));
+
           return Padding(
             padding: const EdgeInsets.only(top: 30),
             child: ListView(
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                var id = document.id;
+              children: houses
+                  .map((house) => Card(
+                        margin: const EdgeInsets.all(8.0),
+                        elevation: 8,
+                        color: house.backgroundColor,
+                        child: ListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AutoSizeText(
+                              "🏘  ${house.name}",
+                              style: const TextStyle(fontSize: 24),
+                              maxLines: 1,
+                            ),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: AutoSizeText(
+                                house.desc,
+                                style: const TextStyle(fontSize: 20),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HouseScreen(
+                                  house: house,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ))
+                  .toList(),
+              /*children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
 
@@ -166,7 +209,7 @@ class HousesState extends DataListScreenState<Houses> {
                     },
                   ),
                 );
-              }).toList(),
+              }).toList(),*/
             ),
           );
         },

@@ -64,6 +64,7 @@ dependencies:
   document_scanner_flutter: ^0.2.7
   advance_pdf_viewer2: ^2.0.4
 
+
 #  firebase_auth: ^3.11.2
 #  firebase_core: ^1.24.0
 

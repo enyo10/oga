@@ -3,6 +3,7 @@ import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ImageItem extends StatelessWidget {
   final File file;
@@ -30,7 +31,13 @@ class ImageItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(basename(file.path)),
+          SizedBox(
+            width: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AutoSizeText(basename(file.path), overflow: TextOverflow.clip,),
+            ),
+          ),
 
           InkWell(
             onDoubleTap: onDeleteItem,

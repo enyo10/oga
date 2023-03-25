@@ -1,7 +1,5 @@
 import 'package:advance_pdf_viewer2/advance_pdf_viewer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:document_scanner_flutter/configs/configs.dart';
-import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -16,6 +14,7 @@ import 'dart:io';
 import '../../helper/helper.dart';
 import '../../models/house.dart';
 import 'image_item.dart';
+import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 
 class AddOccupant extends StatefulWidget {
   final Apartment apartment;
@@ -252,7 +251,13 @@ class _AddOccupantState extends State<AddOccupant> {
                         shrinkWrap: true,
                         itemCount: _imagesItems.length,
                         itemBuilder: (context, index) {
-                          return _imagesItems[index];
+                          var file = _imagesItems[index];
+                          return ImageItem(
+                            file: file,
+                            onDeleteItem: () {
+                              _onRemoveImage(index);
+                            },
+                          );
                         },
                       ),
                     ),
@@ -441,19 +446,19 @@ class _AddOccupantState extends State<AddOccupant> {
             child: Wrap(
               children: <Widget>[
                 ListTile(
-                  leading: const Icon(Icons.picture_as_pdf),
+                  leading: const Icon(Icons.library_add),
                   title: const Text('Ajouter un PDF'),
                   onTap: () async {
-                    _openPdfScanner(context);
-                    /*await _chooseImage(ImageSource.gallery).then((value) {
+                    await _chooseImage(ImageSource.gallery).then((value) {
                       Navigator.of(context).pop();
-                    });*/
+                    });
                   },
                 ),
                 Builder(
                   builder: (context) {
                     return ListTile(
-                      onTap: () => _openImageScanner(context),
+                      onTap: () async => await _chooseImage(ImageSource.camera)
+                          .then((value) => Navigator.of(context).pop()),
                       leading: const Icon(Icons.image),
                       title: const Text('Image'),
                     );
@@ -469,23 +474,27 @@ class _AddOccupantState extends State<AddOccupant> {
         });
   }
 
-  /* Future<void> _chooseImage(ImageSource imageSource) async {
+  _scanDocument() async {
+    File? file = await DocumentScannerFlutter.launchForPdf(context);
+  }
+
+  Future<void> _chooseImage(ImageSource imageSource) async {
     await _imagePicker.pickImage(source: imageSource).then((value) {
       if (value != null) {
         setState(() {
-          _files.add(value);
+          _imagesItems.add(File(value.path));
         });
       }
     });
-  }*/
+  }
 
   _onRemoveImage(int index) {
     setState(() {
-      _files.removeAt(index);
+      _imagesItems.removeAt(index);
     });
   }
 
-  /*_updateImageFromFiles() {
+  _updateImageFromFiles() {
     _imagesItems.clear();
     if (_files.isNotEmpty) {
       for (int i = 0; i < _files.length; i++) {
@@ -500,31 +509,9 @@ class _AddOccupantState extends State<AddOccupant> {
         );
       }
     }
-  }*/
-
-  _openPdfScanner(BuildContext context) async {
-    var doc = await DocumentScannerFlutter.launchForPdf(
-      context,
-      labelsConfig: {
-        ScannerLabelsConfig.ANDROID_NEXT_BUTTON_LABEL: "Continuer",
-        ScannerLabelsConfig.PDF_GALLERY_FILLED_TITLE_SINGLE: "Only 1 Page",
-        ScannerLabelsConfig.PDF_GALLERY_FILLED_TITLE_MULTIPLE:
-            "Only {PAGES_COUNT} Page"
-      },
-      // source: ScannerFileSource.CAMERA
-    );
-    if (doc != null) {
-      _scannedDocument = null;
-      setState(() {});
-      await Future.delayed(const Duration(milliseconds: 100));
-      _scannedDocumentFile = doc;
-      _scannedDocument = await PDFDocument.fromFile(doc);
-      _imagesItems.add(_scannedDocument);
-      setState(() {});
-    }
   }
 
-  _openImageScanner(BuildContext context) async {
+  /* _openImageScanner(BuildContext context) async {
     var image = await DocumentScannerFlutter.launch(context,
         // source: ScannerFileSource.CAMERA,
         labelsConfig: {
@@ -533,8 +520,8 @@ class _AddOccupantState extends State<AddOccupant> {
         });
     if (image != null) {
       //  _scannedImage = image;
-      _imagesItems.add(ImageItem(file: image, onDeleteItem: () {}));
+      _imagesItems.add(image);
       setState(() {});
     }
-  }
+  }*/
 }
