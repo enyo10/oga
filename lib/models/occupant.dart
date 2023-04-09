@@ -15,6 +15,7 @@ class Occupant {
   double deposit;
   double rentAdvance;
   List<dynamic> docsNames = [];
+  String rentalAgreement;
 
   Occupant(
       {required this.id,
@@ -25,7 +26,8 @@ class Occupant {
       required this.email,
       required this.entryDate,
       required this.deposit,
-      required this.rentAdvance});
+      required this.rentAdvance,
+      required this.rentalAgreement});
 
   void terminateLease(int year, int month) {
     releaseDate = DateTime(year = year, month = month);
@@ -55,12 +57,13 @@ class Occupant {
       'lastname': lastname,
       'phoneNumber': phoneNumber,
       'email': email,
-      "payments": payments.map((payment) => payment.toMap()).toList(),
+      'payments': payments.map((payment) => payment.toMap()).toList(),
       'deposit': deposit,
       'advanceRent': rentAdvance,
       'entryDate': entryDate.toIso8601String(),
       'releaseDate': releaseDate?.toIso8601String(),
-      "docsNames": jsonEncode(docsNames)
+      'docsNames': jsonEncode(docsNames),
+      'rentalAgreement': rentalAgreement,
     };
   }
 
@@ -80,5 +83,6 @@ class Occupant {
         releaseDate = map['releaseDate'] != null
             ? DateTime.parse(map['releaseDate'])
             : null,
+        rentalAgreement = map['rentalAgreement'],
         docsNames = jsonDecode(map['docsNames']).toList();
 }

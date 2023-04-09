@@ -9,10 +9,10 @@ import 'package:oga/views/screens/document_detail.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../helper/helper.dart';
-import '../../helper/oga_colors.dart';
-import '../../models/occupant.dart';
-import '../widgets/oga_scaffold.dart';
+import '../../../helper/helper.dart';
+import '../../../helper/oga_colors.dart';
+import '../../../models/occupant.dart';
+import '../../widgets/oga_scaffold.dart';
 
 class OccupantDetails extends StatefulWidget {
   const OccupantDetails({Key? key, required this.occupant}) : super(key: key);

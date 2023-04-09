@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/apartment.dart';
 import 'package:oga/models/occupant.dart';
-import 'package:oga/views/screens/period_payments.dart';
-import 'package:oga/views/widgets/add_occupant.dart';
-import 'package:oga/views/widgets/add_payment.dart';
+import 'package:oga/views/screens/periods/period_payments.dart';
+import 'package:oga/views/screens/occupants/add_occupant.dart';
+import 'package:oga/views/screens/payments/add_payment.dart';
 
-import '../../helper/helper.dart';
-import '../../models/house.dart';
-import '../../models/payment.dart';
-import '../../models/rent_period.dart';
-import '../widgets/apartement_screen_header.dart';
-import '../widgets/number_picker.dart';
-import '../widgets/oga_scaffold.dart';
-import 'occupants.dart';
-import 'occupant_details.dart';
+import '../../../helper/helper.dart';
+import '../../../models/house.dart';
+import '../../../models/payment.dart';
+import '../../../models/rent_period.dart';
+import 'apartement_screen_header.dart';
+import '../../widgets/number_picker.dart';
+import '../../widgets/oga_scaffold.dart';
+import '../occupants/occupants.dart';
+import '../occupants/occupant_details.dart';
 
 class ApartmentScreen extends StatefulWidget {
   const ApartmentScreen(

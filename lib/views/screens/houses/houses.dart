@@ -7,10 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/house.dart';
 import 'package:oga/views/screens/data_list.dart';
-import 'package:oga/views/screens/apartments.dart';
-import 'package:oga/views/widgets/add_house.dart';
+import 'package:oga/views/screens/houses/apartments.dart';
+import 'package:oga/views/screens/houses/add_house.dart';
 
-import '../widgets/oga_scaffold.dart';
+import '../../widgets/oga_scaffold.dart';
 
 class Houses extends DataListScreen {
   const Houses({super.key, required super.collectionName});
@@ -34,8 +34,10 @@ class HousesState extends DataListScreenState<Houses> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        titleTextStyle:
-            GoogleFonts.montserrat(fontSize: 30, color: OgaColors.blueButton),
+        titleTextStyle: GoogleFonts.montserrat(
+          fontSize: 30,
+          color: OgaColors.blueButton,
+        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -139,10 +141,16 @@ class HousesState extends DataListScreenState<Houses> {
                         elevation: 8,
                         color: house.backgroundColor,
                         child: ListTile(
+                          leading: Container(
+
+                          //  color: Colors.white,
+                            child: const Text('🏘',
+                                style: TextStyle(fontSize: 40)),
+                          ),
                           title: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: AutoSizeText(
-                              "🏘  ${house.name}",
+                              " ${house.name}",
                               style: const TextStyle(fontSize: 24),
                               maxLines: 1,
                             ),
@@ -169,47 +177,6 @@ class HousesState extends DataListScreenState<Houses> {
                         ),
                       ))
                   .toList(),
-              /*children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data =
-                    document.data()! as Map<String, dynamic>;
-
-                House house = House.fromMap(data, document.id);
-
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  elevation: 8,
-                  color: house.backgroundColor,
-                  child: ListTile(
-                    title: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AutoSizeText(
-                        "🏘  ${house.name}",
-                        style: const TextStyle(fontSize: 24),
-                        maxLines: 1,
-                      ),
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: AutoSizeText(
-                          house.desc,
-                          style: const TextStyle(fontSize: 20),
-                          maxLines: 1,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => HouseScreen(
-                            house: house,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }).toList(),*/
             ),
           );
         },

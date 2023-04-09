@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/models/apartment.dart';
 
-import '../../helper/helper.dart';
-import '../../models/occupant.dart';
-import '../../models/payment.dart';
-import '../../models/period.dart';
-import '../widgets/add_payment.dart';
-import '../widgets/payment_list_tile.dart';
+import '../../../helper/helper.dart';
+import '../../../models/occupant.dart';
+import '../../../models/payment.dart';
+import '../../../models/period.dart';
+import '../payments/add_payment.dart';
+import '../payments/payment_list_tile.dart';
 
 class PeriodPayments extends StatefulWidget {
   final List<Payment> payments;

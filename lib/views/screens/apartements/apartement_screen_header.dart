@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/occupant.dart';
-import '../../models/rent_period.dart';
+import '../../../models/occupant.dart';
+import '../../../models/rent_period.dart';
 
 class ApartmentScreenHeader extends StatelessWidget {
   const ApartmentScreenHeader({

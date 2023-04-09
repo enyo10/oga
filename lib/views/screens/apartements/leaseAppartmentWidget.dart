@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:oga/models/apartment.dart';
 
-import '../../models/house.dart';
-import '../../models/occupant.dart';
+import '../../../models/house.dart';
+import '../../../models/occupant.dart';
 
 /*
 class LeaseApartmentWidget extends StatefulWidget {

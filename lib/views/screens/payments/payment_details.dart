@@ -5,10 +5,10 @@ import 'package:oga/views/screens/image_enlargement.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/models/occupant.dart';
 
-import '../../helper/helper.dart';
-import '../../models/payment.dart';
-import '../../models/period.dart';
-import '../widgets/info_widget.dart';
+import '../../../helper/helper.dart';
+import '../../../models/payment.dart';
+import '../../../models/period.dart';
+import '../../widgets/info_widget.dart';
 
 class PaymentDetails extends StatefulWidget {
   const PaymentDetails(

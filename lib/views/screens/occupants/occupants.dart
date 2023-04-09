@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:oga/views/widgets/occupant_card.dart';
+import 'package:oga/views/screens/occupants/occupant_card.dart';
 
-import '../../models/occupant.dart';
+import '../../../models/occupant.dart';
 
 class Occupants extends StatefulWidget {
   const Occupants({Key? key, required this.apartmentId}) : super(key: key);

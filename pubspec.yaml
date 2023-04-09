@@ -63,6 +63,7 @@ dependencies:
   flutter_sms: ^2.3.3
   document_scanner_flutter: ^0.2.7
   advance_pdf_viewer2: ^2.0.4
+  pdf: ^3.9.0
 
 
 #  firebase_auth: ^3.11.2

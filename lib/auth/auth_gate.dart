@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:oga/views/screens/houses.dart';
+import 'package:oga/views/screens/houses/houses.dart';
 import '../helper/helper.dart';
 
 class AuthGate extends StatelessWidget {

@@ -7,9 +7,9 @@ import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import 'package:oga/models/apartment.dart';
 import 'package:oga/models/rent_period.dart';
 
-import '../../helper/helper.dart';
-import '../../models/house.dart';
-import 'color_picker.dart';
+import '../../../helper/helper.dart';
+import '../../../models/house.dart';
+import '../../widgets/color_picker.dart';
 
 class AddApartment extends StatefulWidget {
   const AddApartment({

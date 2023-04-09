@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../helper/helper.dart';
-import '../../models/occupant.dart';
-import '../../models/payment.dart';
-import '../screens/payment_details.dart';
+import '../../../helper/helper.dart';
+import '../../../models/occupant.dart';
+import '../../../models/payment.dart';
+import 'payment_details.dart';
 
 class PaymentListTile extends StatefulWidget {
   const PaymentListTile({

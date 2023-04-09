@@ -10,6 +10,7 @@ class House {
   final Color backgroundColor;
   final int constructionYear;
   final List<Apartment> apartments;
+  final String imageName;
 
   House(
       {required this.id,
@@ -18,13 +19,15 @@ class House {
       required this.name,
       required this.backgroundColor,
       required this.constructionYear,
-      required this.apartments});
+      required this.apartments,
+      required this.imageName});
 
   House.fromMap(Map<String, dynamic> mapData, String docId)
       : id = docId,
         name = mapData['name'] ?? '',
         desc = mapData['desc'] ?? '',
         address = mapData['address'] ?? '',
+        imageName = mapData['imageUrl'] ?? '',
         backgroundColor = colorMap[mapData['colorKey']] ?? Colors.white,
         constructionYear = mapData['constructionYear'],
         apartments = List<Apartment>.from(
@@ -41,6 +44,7 @@ class House {
           colorMap.keys.firstWhere((k) => colorMap[k] == backgroundColor),
       "apartments": apartments.map((apartment) => apartment.toMap()).toList(),
       "desc": desc,
+      "imageName": imageName,
       "constructionYear": constructionYear,
     };
   }

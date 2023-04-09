@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oga/models/apartment.dart';
 import 'package:oga/models/occupant.dart';
 
-import '../../helper/helper.dart';
+import '../../../helper/helper.dart';
 
 class PeriodDetails extends StatelessWidget {
   const PeriodDetails({Key? key, required this.data, required this.apartment})

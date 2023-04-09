@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oga/helper/helper.dart';
 
-import '../../models/occupant.dart';
+import '../../../models/occupant.dart';
 
 class OccupantCard extends StatelessWidget {
   final Occupant occupant;

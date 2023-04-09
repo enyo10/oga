@@ -10,10 +10,10 @@ import 'package:oga/models/apartment.dart';
 import 'package:oga/views/widgets/image_item.dart';
 import 'package:path/path.dart';
 
-import '../../helper/helper.dart';
-import '../../models/occupant.dart';
-import '../../models/payment.dart';
-import '../../models/period.dart';
+import '../../../helper/helper.dart';
+import '../../../models/occupant.dart';
+import '../../../models/payment.dart';
+import '../../../models/period.dart';
 
 class AddPayment extends StatefulWidget {
   final Occupant? occupant;

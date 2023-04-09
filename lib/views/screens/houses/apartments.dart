@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:oga/views/screens/apartment_screen.dart';
-import 'package:oga/views/widgets/add_apartment.dart';
-import '../../helper/oga_colors.dart';
-import '../../helper/oga_style.dart';
-import '../../models/house.dart';
-import '../../models/occupant.dart';
-import '../widgets/oga_scaffold.dart';
+import 'package:oga/views/screens/apartements/apartment_screen.dart';
+import '../../../helper/oga_colors.dart';
+import '../../../helper/oga_style.dart';
+import '../../../models/house.dart';
+import '../../../models/occupant.dart';
+import '../../widgets/oga_scaffold.dart';
+import '../apartements/add_apartment.dart';
 
 class HouseScreen extends StatefulWidget {
   const HouseScreen({Key? key, required this.house}) : super(key: key);
@@ -37,9 +36,11 @@ class _HouseScreenState extends State<HouseScreen> {
         elevation: 0,
         centerTitle: true,
         titleTextStyle: appBarTitleTextStyle,
-        leading: IconButton(onPressed: (){
-          Navigator.of(context).pop();
-        }, icon: Icon(Icons.arrow_back, color: OgaColors.blueButton)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back, color: OgaColors.blueButton)),
         title: const Text(
           "Appartements",
         ),
