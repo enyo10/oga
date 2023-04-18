@@ -1,15 +1,18 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:oga/alarm_helper.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/house.dart';
 import 'package:oga/views/screens/data_list.dart';
-import 'package:oga/views/screens/houses/apartments.dart';
+import 'package:oga/views/screens/apartements/apartments.dart';
 import 'package:oga/views/screens/houses/add_house.dart';
 
+import '../../../models/occupant.dart';
 import '../../widgets/oga_scaffold.dart';
 
 class Houses extends DataListScreen {
@@ -20,6 +23,12 @@ class Houses extends DataListScreen {
 }
 
 class HousesState extends DataListScreenState<Houses> {
+  @override
+  void initState() {
+    print("object");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return OgaScaffold(
@@ -124,26 +133,25 @@ class HousesState extends DataListScreenState<Houses> {
             );
           }
 
-          var houses = snapshot.data!.docs.map((DocumentSnapshot document) {
+          var housesList = snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
             House house = House.fromMap(data, document.id);
             return house;
           }).toList();
-          houses.sort((a, b) => a.name.compareTo(b.name));
+          housesList.sort((a, b) => a.name.compareTo(b.name));
 
           return Padding(
             padding: const EdgeInsets.only(top: 30),
             child: ListView(
-              children: houses
+              children: housesList
                   .map((house) => Card(
                         margin: const EdgeInsets.all(8.0),
                         elevation: 8,
                         color: house.backgroundColor,
                         child: ListTile(
                           leading: Container(
-
-                          //  color: Colors.white,
+                            //  color: Colors.white,
                             child: const Text('🏘',
                                 style: TextStyle(fontSize: 40)),
                           ),
@@ -184,4 +192,41 @@ class HousesState extends DataListScreenState<Houses> {
       resizeToAvoidBottomInset: false,
     );
   }
+
+  _loadHouses() async {
+    await loadHouses().then(
+      (value) => setState(
+        () {
+          houses = value;
+        },
+      ),
+    );
+  }
+
+  _loadOccupants() async {
+    await loadOccupants().then(
+      (value) => setState(
+        () {
+          occupants = value;
+        },
+      ),
+    );
+  }
+
+  _configAlarm() async {
+    await _loadHouses();
+    await _loadOccupants();
+    const int helloAlarmID = 11;
+    await AndroidAlarmManager.periodic(
+        const Duration(minutes: 1), helloAlarmID, messageSend);
+  }
+
+/*
+  Future<List<Occupant>> loadOccupants() async {
+    List<Occupant> occupants = [];
+    await FirebaseFirestore.instance.collection('occupants').get().then((value) {
+      occupants = value.docs.map((e) => Occupant.fromMap(e.data())).toList();
+    });
+    return occupants;
+  }*/
 }

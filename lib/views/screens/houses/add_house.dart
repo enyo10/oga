@@ -302,7 +302,7 @@ class _AddHouseState extends State<AddHouse> {
       } else {
         await showDialog<String>(
             context: context,
-            builder: (BuildContext context) {
+            builder: (BuildContext ctx) {
               return AlertDialog(
                 content: const Text(" Vous n'avez pas ajouté d'image."
                     "Voulez vous continuer ?"),

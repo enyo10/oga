@@ -38,7 +38,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-#  firebase_core: ^1.22.0
+  #  firebase_core: ^1.22.0
   cloud_firestore: ^3.4.8
   month_picker_dialog_2: ^0.5.5
 
@@ -64,6 +64,9 @@ dependencies:
   document_scanner_flutter: ^0.2.7
   advance_pdf_viewer2: ^2.0.4
   pdf: ^3.9.0
+  workmanager: ^0.5.1
+  android_alarm_manager_plus: ^2.1.2
+  shared_preferences: ^2.1.0
 
 
 #  firebase_auth: ^3.11.2
@@ -94,9 +97,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-      - assets/
-#   assets:
-#     - assets/
+    - assets/
+  #   assets:
+  #     - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
