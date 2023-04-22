@@ -23,7 +23,7 @@ class Payment {
         paymentPeriod = Period(
             month: map['paymentPeriod']['month'],
             year: map['paymentPeriod']['year']),
-        amount = map['amount'],
+        amount = map['amount']+.0,
         desc = map['desc'] ?? '',
         imagesNames = jsonDecode(map['imagesNames'])
             .toList();

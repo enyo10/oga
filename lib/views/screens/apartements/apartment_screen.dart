@@ -1,7 +1,7 @@
 import 'dart:isolate';
 
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/apartment.dart';
@@ -35,23 +35,35 @@ class ApartmentScreen extends StatefulWidget {
 class _ApartmentScreenState extends State<ApartmentScreen> {
   CollectionReference occupants =
       FirebaseFirestore.instance.collection('occupants');
-  late List<Data> monthDataList;
-  Occupant? _occupant;
-  late int _year;
+  static late List<Data> monthDataList;
+  static Occupant? _occupant;
+  static late int _year;
   DateTime? leaseDate;
   late String? occupantId;
+  static String occupantTelNumber = "";
+  static late Apartment apartment;
+  static late Map<String, dynamic> map;
 
   @override
   void initState() {
+    super.initState();
     occupantId = widget.apartment.occupantId;
+    apartment = widget.apartment;
     if (widget.year == null) {
       _year = DateTime.now().year;
     }
     _initMonthList();
     _loadPayments();
-    const int helloAlarmID = 3;
+    map = {
+      'monthDataList': monthDataList.map((e) => e.toMap()).toList(),
+      'apartment': apartment.toMap(),
+      'year': _year
+    };
+    /*const int helloAlarmID = 33;
+
     AndroidAlarmManager.periodic(
-        const Duration(minutes: 1), helloAlarmID, callback);
+        const Duration(minutes: 1), helloAlarmID, callBack,
+        params: map);*/
     super.initState();
   }
 
@@ -242,6 +254,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                 Map<String, dynamic> data =
                     snapshot.data!.data() as Map<String, dynamic>;
                 _occupant = Occupant.fromMap(data);
+                occupantTelNumber = _occupant!.phoneNumber;
 
                 _loadPayments();
 
@@ -395,14 +408,14 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   }
 
   @pragma('vm:entry-point')
-  static void callback() {
+  /* static void callback() {
     var date = DateTime.now();
     final int isolateId = Isolate.current.hashCode;
     print(" Current Isole $isolateId");
 
     print(
         "Paiement en souffrence. Veuiller régler la situation s'il vous plait");
-    /* var index = date.month;
+    */ /* var index = date.month;
     var data = monthDataList.elementAt(index - 1);
     var rent = _getActualRent(data.month);
     List<Payment> payments = data.payments;
@@ -413,18 +426,15 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
           "Paiement en souffrence. Veuiller régler la situation s'il vous plait");
     }else{
       print(" Tu es à jour ---------");
-    }*/
-  }
+    }*/ /*
+  }*/
 
   Widget _monthDataWidget(int index) {
     var data = monthDataList.elementAt(index);
-
     var month = monthMap[data.month];
 
     List<Payment> payments = data.payments;
-    var icon = _paymentsStatus(
-      payments,
-    );
+    var icon = _paymentsStatus(payments, month!, index);
     return GestureDetector(
       onDoubleTap: () async {
         await _navigateToPeriodsPayments(payments, data);
@@ -443,7 +453,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                 SizedBox(
                   width: 150.0,
                   child: Text(
-                    month!,
+                    month,
                     style: const TextStyle(fontSize: 20.0),
                   ),
                 ),
@@ -474,11 +484,26 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     }
   }
 
+  bool _isPeriodOK(int index, List<Payment> payments) {
+    var actualYear = DateTime.now();
+    var actualMonth = actualYear.month;
+
+    if (_year < actualYear.year) {
+      return true;
+    }
+
+    if (index < actualMonth || payments.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   bool _isApartmentOccupied() {
     return _occupant != null;
   }
 
-  Icon _paymentsStatus(List<Payment> paymentList) {
+  Icon _paymentsStatus(List<Payment> paymentList, String month, int index) {
     var payments = paymentList;
 
     var icon = const Icon(
@@ -489,7 +514,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     if (payments.isNotEmpty) {
       var month = payments.first.paymentPeriod.month;
       var rent = _getActualRent(month);
-
       var sum = _getSum(payments);
 
       if (sum == rent.value) {
@@ -498,10 +522,20 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
           color: Colors.green,
         );
       } else {
+        if (_isPeriodOK(index, payments)) {
+          print(" Veuillez soldez votre compte pour $month");
+        }
         icon = const Icon(
           Icons.check_box_outlined,
           color: Colors.orange,
         );
+      }
+    } else {
+      if (_isPeriodOK(index, payments)) {
+        print("Paiement de $month en souffrance\n"
+            "Veuillez regler au plus vite."
+            "  "
+            "$occupantTelNumber");
       }
     }
 
@@ -521,10 +555,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     return widget.apartment.rent(_year, month);
   }
 
-  Future<void> _addPayment(
-    Apartment apartment,
-    Occupant? occupant,
-  ) async {
+  Future<void> _addPayment(Apartment apartment, Occupant? occupant) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AddPayment(
@@ -538,10 +569,11 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   Future<void> _navigateToPeriodsPayments(
       List<Payment> payments, Data data) async {
     var periodPayments = PeriodPayments(
-        payments: payments,
-        occupant: _occupant!,
-        apartment: widget.apartment,
-        data: data);
+      payments: payments,
+      occupant: _occupant!,
+      apartment: widget.apartment,
+      data: data,
+    );
 
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => periodPayments),
@@ -575,9 +607,13 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40.0),
           ),
-        ).then((value) => setState(() {
+        ).then(
+          (value) => setState(
+            () {
               _occupant = value;
-            }));
+            },
+          ),
+        );
 
         /* _isOccupied()
             ? await _addPayment(
@@ -656,3 +692,28 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
         "[$now] Hello, Roger! isolate=${isolateId} function='$printHelloBis'");
   }
 }
+
+/*void callBack(int id, Map<String, dynamic> params) {
+  DateTime actualDate = DateTime.now();
+  print("++++++++++++   callback called  ++++++++++++");
+  var apartment = Apartment.fromMap(params['apartment']);
+  print('++++++++++++  ${apartment.id}       ++++++++++++++++++');
+  List<Data> monthDataList =
+      List<Data>.from(params['monthDataList']!.map((e) => Data.fromMap(e)))
+          .toList();
+  print("-----------   ${monthDataList.length} -------------------------");
+
+  var year = params['year'];
+
+  for (int i = 0; i < monthDataList.length; i++) {
+    Data monthData = monthDataList[i];
+    Rent rent = apartment.rent(year, i + 1);
+    List<Payment> payments = monthData.payments;
+    var sum = payments.fold(
+        0.0, (previousValue, element) => previousValue + element.amount);
+    apartment.rent(1, 2);
+    if (sum < rent.value) {
+      print("++++++++++   Vous nous devez de l'argent   *****************");
+    }
+  }
+}*/

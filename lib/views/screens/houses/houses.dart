@@ -1,18 +1,19 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:oga/alarm_helper.dart';
 import 'package:oga/helper/oga_colors.dart';
+import 'package:oga/messaging.dart';
 import 'package:oga/models/house.dart';
 import 'package:oga/views/screens/data_list.dart';
 import 'package:oga/views/screens/apartements/apartments.dart';
 import 'package:oga/views/screens/houses/add_house.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-import '../../../models/occupant.dart';
 import '../../widgets/oga_scaffold.dart';
 
 class Houses extends DataListScreen {
@@ -23,9 +24,30 @@ class Houses extends DataListScreen {
 }
 
 class HousesState extends DataListScreenState<Houses> {
+  //String uId = FirebaseAuth.instance.currentUser!.uid;
+  static _getPermission() async => await [
+    Permission.sms,
+  ].request();
+
+  static Future<bool> _isPermissionGranted() async =>
+      await Permission.sms.status.isGranted;
+
   @override
   void initState() {
-    print("object");
+    _getPermission();
+
+    Messaging.initialize(userId).then((value) {
+      var params = Messaging.params;
+      print(" llllllll lllll maisons  ${Messaging.houses.length}");
+      const int helloAlarmID = 21;
+      AndroidAlarmManager.periodic(
+        const Duration(minutes: 1),
+        helloAlarmID,
+        Messaging.callback,
+        params: params,
+      );
+    });
+
     super.initState();
   }
 
@@ -192,41 +214,4 @@ class HousesState extends DataListScreenState<Houses> {
       resizeToAvoidBottomInset: false,
     );
   }
-
-  _loadHouses() async {
-    await loadHouses().then(
-      (value) => setState(
-        () {
-          houses = value;
-        },
-      ),
-    );
-  }
-
-  _loadOccupants() async {
-    await loadOccupants().then(
-      (value) => setState(
-        () {
-          occupants = value;
-        },
-      ),
-    );
-  }
-
-  _configAlarm() async {
-    await _loadHouses();
-    await _loadOccupants();
-    const int helloAlarmID = 11;
-    await AndroidAlarmManager.periodic(
-        const Duration(minutes: 1), helloAlarmID, messageSend);
-  }
-
-/*
-  Future<List<Occupant>> loadOccupants() async {
-    List<Occupant> occupants = [];
-    await FirebaseFirestore.instance.collection('occupants').get().then((value) {
-      occupants = value.docs.map((e) => Occupant.fromMap(e.data())).toList();
-    });
-    return occupants;
-  }*/
 }

@@ -74,9 +74,20 @@ Map<int, String> monthMap = {
 
 class Data {
   final int month;
-  final List<Payment> _payments = [];
+  List<Payment> _payments = [];
 
   Data({required this.month});
+  Data.fromMap(Map<String, dynamic> mapData)
+      : month = mapData['month'],
+        _payments = List<Payment>.from(
+            mapData['payments']!.map((e) => Payment.fromMap(e))).toList();
+
+  Map<String, dynamic> toMap() {
+    return {
+      "month": month,
+      "payments": _payments.map((rent) => rent.toMap()).toList(),
+    };
+  }
 
   addPayment(Payment payment) {
     _payments.add(payment);
@@ -111,6 +122,7 @@ String stringValueOfDate(DateTime dateTime) {
 
   return "$date/$month/$yearShortCut";
 }
+
 Future<dynamic> showCircularProgressIndicatorDialog(BuildContext context) {
   return showDialog(
       context: context,
@@ -122,9 +134,7 @@ Future<dynamic> showCircularProgressIndicatorDialog(BuildContext context) {
                 "En progression...",
                 style: TextStyle(fontSize: 20),
               ),*/
-              CircularProgressIndicator(
-
-              ),
+              CircularProgressIndicator(),
             ],
           ),
         );
