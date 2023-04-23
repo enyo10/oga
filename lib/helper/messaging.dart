@@ -2,9 +2,9 @@ import 'package:background_sms/background_sms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oga/models/occupant.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'models/apartment.dart';
-import 'models/house.dart';
-import 'models/payment.dart';
+import '../models/apartment.dart';
+import '../models/house.dart';
+import '../models/payment.dart';
 
 class Messaging {
   static List<Occupant> occupants = [];

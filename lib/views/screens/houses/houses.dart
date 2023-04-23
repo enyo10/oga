@@ -1,13 +1,10 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/helper/oga_colors.dart';
-import 'package:oga/messaging.dart';
 import 'package:oga/models/house.dart';
 import 'package:oga/views/screens/data_list.dart';
 import 'package:oga/views/screens/apartements/apartments.dart';
@@ -24,10 +21,9 @@ class Houses extends DataListScreen {
 }
 
 class HousesState extends DataListScreenState<Houses> {
-  //String uId = FirebaseAuth.instance.currentUser!.uid;
   static _getPermission() async => await [
-    Permission.sms,
-  ].request();
+        Permission.sms,
+      ].request();
 
   static Future<bool> _isPermissionGranted() async =>
       await Permission.sms.status.isGranted;
@@ -36,7 +32,7 @@ class HousesState extends DataListScreenState<Houses> {
   void initState() {
     _getPermission();
 
-    Messaging.initialize(userId).then((value) {
+    /* Messaging.initialize(userId).then((value) {
       var params = Messaging.params;
       print(" llllllll lllll maisons  ${Messaging.houses.length}");
       const int helloAlarmID = 21;
@@ -46,7 +42,7 @@ class HousesState extends DataListScreenState<Houses> {
         Messaging.callback,
         params: params,
       );
-    });
+    });*/
 
     super.initState();
   }
