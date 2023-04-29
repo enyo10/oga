@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'Kindacode.com',
       theme: ThemeData(primarySwatch: Colors.green),
       home: const HomePage(),
+
     );
   }
 }

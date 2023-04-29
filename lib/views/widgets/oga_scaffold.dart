@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:oga/helper/oga_colors.dart';
 
 class OgaScaffold extends StatelessWidget {
   const OgaScaffold({
@@ -17,7 +15,7 @@ class OgaScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    /* return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -34,31 +32,37 @@ class OgaScaffold extends StatelessWidget {
         backgroundColor: Colors.transparent,
         body: body,
       ),
-    );
-    /* return Scaffold(
-      appBar: AppBar(
+    );*/
+    return Scaffold(
+      /*appBar: AppBar(
         backgroundColor: Colors.transparent,
-      ),
-
+      ),*/
+      appBar: appBar??AppBar(backgroundColor: Colors.transparent,),
+      floatingActionButton: floatingActionButton,
       body: Stack(
         children: [
           Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
+              /*gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
                   Color.fromRGBO(2, 29, 112, 1),
                   Color.fromRGBO(9, 16, 44, 1)
                 ],
+              ),*/
+              image: DecorationImage(
+                image: AssetImage(
+                  'assets/oga_porte_v.jpg',
+                ),
+                fit: BoxFit.cover,
               ),
             ),
-           // child: body,
+            // child: body,
           ),
-         body,
-
+          body,
         ],
       ),
-    );*/
+    );
   }
 }

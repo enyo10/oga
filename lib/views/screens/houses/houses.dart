@@ -9,6 +9,8 @@ import 'package:oga/models/house.dart';
 import 'package:oga/views/screens/data_list.dart';
 import 'package:oga/views/screens/apartements/apartments.dart';
 import 'package:oga/views/screens/houses/add_house.dart';
+import 'package:oga/views/widgets/oga_glass_container.dart';
+import 'package:oga/views/widgets/oga_list_tile.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../widgets/oga_scaffold.dart';
@@ -163,7 +165,22 @@ class HousesState extends DataListScreenState<Houses> {
             padding: const EdgeInsets.only(top: 30),
             child: ListView(
               children: housesList
-                  .map((house) => Card(
+                  .map((house) => OgaGlassContainer(
+                            container: OgaListTile(
+                              widget: Text(" hello"),
+                              data: house,
+                            ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HouseScreen(
+                        house: house,
+                      ),
+                    ),
+                  );
+                },
+                          )
+                      /*Card(
                         margin: const EdgeInsets.all(8.0),
                         elevation: 8,
                         color: house.backgroundColor,
@@ -201,7 +218,8 @@ class HousesState extends DataListScreenState<Houses> {
                             );
                           },
                         ),
-                      ))
+                      )*/
+                      )
                   .toList(),
             ),
           );

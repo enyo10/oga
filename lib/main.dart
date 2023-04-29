@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:oga/views/widgets/oga_glass_container.dart';
 import 'helper/messaging.dart';
 import 'auth/auth_gate.dart';
 import 'firebase_options.dart';
@@ -51,10 +52,14 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Oga',
       theme: ThemeData(
-          scaffoldBackgroundColor: const Color(0xEEE1F5FE),
+          //scaffoldBackgroundColor: const Color(0xEEE1F5FE),
+        scaffoldBackgroundColor: Colors.transparent,
+
           primarySwatch: OgaColors.myLightBlue,
-          primaryColor: Colors.blue[100]),
+          primaryColor: Colors.blue[900],
+      ),
       home: const AuthGate(),
+     // home: OgaPage(),
     );
   }
 }
