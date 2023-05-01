@@ -9,6 +9,7 @@ import 'package:oga/models/occupant.dart';
 import 'package:oga/views/screens/periods/period_payments.dart';
 import 'package:oga/views/screens/occupants/add_occupant.dart';
 import 'package:oga/views/screens/payments/add_payment.dart';
+import 'package:oga/views/widgets/oga_glass_container.dart';
 
 import '../../../helper/helper.dart';
 import '../../../models/house.dart';
@@ -59,9 +60,9 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       'apartment': apartment.toMap(),
       'year': _year
     };
-    /*const int helloAlarmID = 33;
+    const int helloAlarmID = 33;
 
-    AndroidAlarmManager.periodic(
+    /* AndroidAlarmManager.periodic(
         const Duration(minutes: 1), helloAlarmID, callBack,
         params: map);*/
     super.initState();
@@ -71,241 +72,250 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   Widget build(BuildContext context) {
     Rent rent = widget.apartment.getActualRent();
 
-    return SafeArea(
-      child: OgaScaffold(
-        appBar: occupantId == null
-            ? AppBar(
-                elevation: 0.0,
-                backgroundColor: Colors.transparent,
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: OgaColors.blueButton,
-                  ),
+    return OgaScaffold(
+      appBar: occupantId == null
+          ? AppBar(
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: OgaColors.blueButton,
                 ),
-              )
-            : AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: OgaColors.blueButton,
-                  ),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      _search();
-                    },
-                    icon: Icon(
-                      Icons.search,
-                      color: OgaColors.blueButton,
-                    ),
-                  ),
-                  Theme(
-                    data: Theme.of(context).copyWith(
-                      textTheme:
-                          const TextTheme().apply(bodyColor: Colors.black),
-                      dividerColor: Colors.white,
-                      iconTheme: IconThemeData(color: OgaColors.blueButton),
-                    ),
-                    child: PopupMenuButton<int>(
-                      color: OgaColors.replaceBackgroundBlurBlack,
-                      itemBuilder: (context) => [
-                        PopupMenuItem<int>(value: 0, child: Text(_itemValue)),
-                        const PopupMenuItem<int>(
-                            value: 1, child: Text("Liste des paiements")),
-                        const PopupMenuDivider(),
-                        PopupMenuItem<int>(
-                          value: 2,
-                          child: Row(
-                            children: const [
-                              Icon(
-                                Icons.date_range,
-                                color: Colors.red,
-                              ),
-                              SizedBox(
-                                width: 7,
-                              ),
-                              Text("Year")
-                            ],
-                          ),
-                        ),
-                      ],
-                      onSelected: (item) => _selectedItem(context, item),
-                    ),
-                  ),
-                ],
               ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            _isApartmentOccupied()
-                ? await _addPayment(
-                    widget.apartment,
-                    _occupant!,
-                  ).then((value) => setState(() {}))
-                : await showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext bc) {
-                      return AddOccupant(
-                        apartment: widget.apartment,
-                        house: widget.house,
-                      );
-                    },
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40.0),
-                    ),
-                  ).then(
-                    (value) => setState(() {
-                      _occupant = value;
-                    }),
-                  );
-          },
-          child: Icon(
-            Icons.add,
-            color: OgaColors.greyText10,
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: FutureBuilder<DocumentSnapshot>(
-            future: occupants.doc(widget.apartment.occupantId).get(),
-            builder: (BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Column(
-                  children: [
-                    Card(
-                      color: Colors.amberAccent,
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: const [
-                                Text(
-                                  "Nom:  ",
-                                  style: TextStyle(fontSize: 24),
-                                ),
-                                Text(
-                                  "",
-                                  style: TextStyle(fontSize: 24),
-                                )
-                              ],
+            )
+          : AppBar(
+              //backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              flexibleSpace: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
+                      fit: BoxFit.fill),
+                ),
+              ),
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: OgaColors.myLightBlue.shade100,
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    _search();
+                  },
+                  icon: Icon(
+                    Icons.search,
+                    color: OgaColors.myLightBlue.shade100,
+                  ),
+                ),
+                Theme(
+                  data: Theme.of(context).copyWith(
+                    textTheme: const TextTheme()
+                        .apply(bodyColor: OgaColors.myLightBlue.shade100),
+                    dividerColor: Colors.white,
+                    iconTheme: IconThemeData(color: OgaColors.myLightBlue.shade100),
+                  ),
+                  child: PopupMenuButton<int>(
+                    color: OgaColors.myLightBlue.shade100,
+                    itemBuilder: (context) => [
+                      PopupMenuItem<int>(value: 0, child: Text(_itemValue)),
+                      const PopupMenuItem<int>(
+                          value: 1, child: Text("Liste des paiements")),
+                      const PopupMenuDivider(),
+                      PopupMenuItem<int>(
+                        value: 2,
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.date_range,
+                              color: Colors.red,
                             ),
-                            Row(
-                              children: const [Text("Prenom: "), Text("")],
+                            SizedBox(
+                              width: 7,
                             ),
-                            Row(
-                              children: [
-                                const Text(
-                                  "Loyer: ",
-                                  style: TextStyle(fontSize: 30),
-                                ),
-                                Text(
-                                  "${rent.value}",
-                                  style: const TextStyle(fontSize: 30),
-                                )
-                              ],
-                            )
+                            Text("Year")
                           ],
                         ),
                       ),
-                    ),
-                    const Expanded(
-                      child: Card(
-                        child: Center(
-                          child: Text("Something went wrong"),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                    onSelected: (item) => _selectedItem(context, item),
+                  ),
+                ),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          _isApartmentOccupied()
+              ? await _addPayment(
+                  widget.apartment,
+                  _occupant!,
+                ).then((value) => setState(() {}))
+              : await showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext bc) {
+                    return AddOccupant(
+                      apartment: widget.apartment,
+                      house: widget.house,
+                    );
+                  },
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40.0),
+                  ),
+                ).then(
+                  (value) => setState(() {
+                    _occupant = value;
+                  }),
                 );
-              }
+        },
+        child: Icon(
+          Icons.add,
+          color: OgaColors.greyText10,
+        ),
+      ),
 
-              if (snapshot.hasData && !snapshot.data!.exists) {
-                _occupant = null;
-                return Column(
-                  children: [
-                    ApartmentScreenHeader(occupant: _occupant, rent: rent),
-                    const Expanded(
-                      child: Card(
-                        child: Center(
-                          child: Text(
-                            "Appartement vide",
-                            style: TextStyle(fontSize: 30),
+      body: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: FutureBuilder<DocumentSnapshot>(
+          future: occupants.doc(widget.apartment.occupantId).get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Column(
+                children: [
+                  Card(
+                    color: Colors.amberAccent,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: const [
+                              Text(
+                                "Nom:  ",
+                                style: TextStyle(fontSize: 24),
+                              ),
+                              Text(
+                                "",
+                                style: TextStyle(fontSize: 24),
+                              )
+                            ],
                           ),
+                          Row(
+                            children: const [Text("Prenom: "), Text("")],
+                          ),
+                          Row(
+                            children: [
+                              const Text(
+                                "Loyer: ",
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              Text(
+                                "${rent.value}",
+                                style: const TextStyle(fontSize: 30),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Expanded(
+                    child: Card(
+                      child: Center(
+                        child: Text("Something went wrong"),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              _occupant = null;
+              return Column(
+                children: [
+                  ApartmentScreenHeader(occupant: _occupant, rent: rent),
+                  const Expanded(
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          "Appartement vide",
+                          style: TextStyle(fontSize: 30),
                         ),
                       ),
                     ),
-                  ],
-                );
-              }
+                  ),
+                ],
+              );
+            }
 
-              if (snapshot.connectionState == ConnectionState.done) {
-                Map<String, dynamic> data =
-                    snapshot.data!.data() as Map<String, dynamic>;
-                _occupant = Occupant.fromMap(data);
-                occupantTelNumber = _occupant!.phoneNumber;
+            if (snapshot.connectionState == ConnectionState.done) {
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+              _occupant = Occupant.fromMap(data);
+              occupantTelNumber = _occupant!.phoneNumber;
 
-                _loadPayments();
+              _loadPayments();
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onDoubleTap: () async {
-                          _navigateToOccupantDetails();
-                        },
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onDoubleTap: () async {
+                        _navigateToOccupantDetails();
+                      },
+                      child: OgaGlassContainer(
                         child: ApartmentScreenHeader(
                           occupant: _occupant,
                           rent: rent,
                         ),
                       ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 20.0),
-                            child: Text(
-                              "Situation en $_year",
-                              style: TextStyle(
-                                  fontSize: 20, color: OgaColors.blueButton),
-                            ),
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20.0),
+                          child: Text(
+                            "Situation en $_year",
+                            style: TextStyle(
+                                fontSize: 20, color: OgaColors.blueButton),
                           ),
-                        ],
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: monthDataList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return _monthDataWidget(index);
-                          },
                         ),
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: monthDataList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return OgaGlassContainer(
+                              height: 60.0, child: _monthDataWidget(index));
+                        },
                       ),
-                    ],
-                  ),
-                );
-              }
+                    ),
+                  ],
+                ),
+              );
+            }
 
-              return const Center(child: Text("loading"));
-            },
-          ),
+            return const Center(child: Text("loading"));
+          },
         ),
-        resizeToAvoidBottomInset: false,
       ),
+      // resizeToAvoidBottomInset: false,
     );
   }
 
@@ -442,6 +452,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       },
       child: SizedBox(
         child: Card(
+          color: Colors.transparent,
           elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -454,7 +465,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                   width: 150.0,
                   child: Text(
                     month,
-                    style: const TextStyle(fontSize: 20.0),
+                    style: TextStyle(fontSize: 20.0, color: OgaColors.grey1),
                   ),
                 ),
                 Visibility(

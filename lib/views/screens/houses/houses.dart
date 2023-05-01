@@ -59,9 +59,10 @@ class HousesState extends DataListScreenState<Houses> {
             "Maisons",
             //style: TextStyle(color: OgaColors.grey2),
           ),
+
         ),
+      // backgroundColor: Colors.transparent,
         elevation: 0,
-        backgroundColor: Colors.transparent,
         centerTitle: true,
         titleTextStyle: GoogleFonts.montserrat(
           fontSize: 30,
@@ -80,6 +81,7 @@ class HousesState extends DataListScreenState<Houses> {
                   builder: (context) => ProfileScreen(
                     appBar: AppBar(
                       title: const Text('User Profile'),
+                      backgroundColor: Colors.transparent,
                     ),
                     actions: [
                       SignedOutAction((context) {
@@ -103,6 +105,13 @@ class HousesState extends DataListScreenState<Houses> {
           )
         ],
         automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
+                fit: BoxFit.fill),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -166,7 +175,7 @@ class HousesState extends DataListScreenState<Houses> {
             child: ListView(
               children: housesList
                   .map((house) => OgaGlassContainer(
-                            container: OgaListTile(
+                            child: OgaListTile(
                               widget: Text(" hello"),
                               data: house,
                             ),

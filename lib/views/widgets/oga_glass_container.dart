@@ -3,10 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class OgaGlassContainer extends StatelessWidget {
-  const OgaGlassContainer({Key? key, required this.container, this.onTap})
+  const OgaGlassContainer(
+      {Key? key, required this.child, this.onTap, this.width, this.height})
       : super(key: key);
-  final Widget container;
+  final Widget child;
   final void Function()? onTap;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +22,8 @@ class OgaGlassContainer extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: Container(
-              height: size.height * 0.25,
-              width: size.width * 0.96,
+             height: height ?? size.height * 0.20,
+              width: width ?? size.width * 0.96,
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.3),
               ),
@@ -45,7 +48,7 @@ class OgaGlassContainer extends StatelessWidget {
                           ]),
                     ),
                   ),
-                  container,
+                  child,
                   // OgaListTile(),
                 ],
               ),

@@ -32,132 +32,130 @@ class _OccupantDetailsState extends State<OccupantDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: OgaScaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back),
-            color: OgaColors.blueButton,
-          ),
-          title: const Text("Locataire info"),
-          titleTextStyle: appBarTitleTextStyle,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+    return OgaScaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back),
+          color: OgaColors.myLightBlue.shade100,
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OgaTextWidget(
-                            text:
-                                "${widget.occupant.firstname}  ${widget.occupant.lastname}",
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [OgaTextWidget(text: widget.occupant.email)],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OgaTextWidget(
-                            text: widget.occupant.phoneNumber,
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OgaTextWidget(
-                              text:
-                                  "Caution: ${widget.occupant.deposit.toString()}"),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OgaTextWidget(
-                              text:
-                                  "Avance: ${widget.occupant.rentAdvance.toString() ?? '-'}"),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OgaTextWidget(
-                            text:
-                                "Date d'entrée:${stringValueOfDate(widget.occupant.entryDate)}",
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.occupant.docsNames.length,
-                    itemBuilder: (builderContext, index) {
-                      var docName = widget.occupant.docsNames[index] ?? "";
-                      return ListTile(
-                        title: Text(docName),
-                        onTap: () async {
-                          if (kDebugMode) {
-                            print("printed url: $docName");
-                          }
-                          _launchUrl(docName);
-                          //Get the path to the directory
-
-                          /* Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    DocumentDetails(documentName: docName)),
-                          );*/
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        resizeToAvoidBottomInset: true,
+        title: const Text("Locataire info"),
+        titleTextStyle: appBarTitleTextStyle,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 40,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OgaTextWidget(
+                          text:
+                              "${widget.occupant.firstname}  ${widget.occupant.lastname}",
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [OgaTextWidget(text: widget.occupant.email)],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OgaTextWidget(
+                          text: widget.occupant.phoneNumber,
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OgaTextWidget(
+                            text:
+                                "Caution: ${widget.occupant.deposit.toString()}"),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OgaTextWidget(
+                            text:
+                                "Avance: ${widget.occupant.rentAdvance.toString() ?? '-'}"),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OgaTextWidget(
+                          text:
+                              "Date d'entrée:${stringValueOfDate(widget.occupant.entryDate)}",
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.occupant.docsNames.length,
+                  itemBuilder: (builderContext, index) {
+                    var docName = widget.occupant.docsNames[index] ?? "";
+                    return ListTile(
+                      title: Text(docName),
+                      onTap: () async {
+                        if (kDebugMode) {
+                          print("printed url: $docName");
+                        }
+                        _launchUrl(docName);
+                        //Get the path to the directory
+
+                        /* Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DocumentDetails(documentName: docName)),
+                        );*/
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      resizeToAvoidBottomInset: true,
     );
   }
 

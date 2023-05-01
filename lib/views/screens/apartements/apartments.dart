@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:oga/views/screens/apartements/apartment_screen.dart';
+import 'package:oga/views/widgets/oga_glass_container.dart';
 import '../../../helper/oga_colors.dart';
 import '../../../helper/oga_style.dart';
 import '../../../models/house.dart';
@@ -33,6 +34,13 @@ class _HouseScreenState extends State<HouseScreen> {
     return OgaScaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
+                fit: BoxFit.fill),
+          ),
+        ),
         elevation: 0,
         centerTitle: true,
         titleTextStyle: appBarTitleTextStyle,
@@ -63,12 +71,10 @@ class _HouseScreenState extends State<HouseScreen> {
       body: Container(
         padding: const EdgeInsets.only(top: 40),
         child: count == 0
-            ? const Center(
+            ? Center(
                 child: Text(
                   " Pas de donnée",
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
+                  style: TextStyle(fontSize: 30, color: OgaColors.whiteText1),
                 ),
               )
             : ListView.builder(
@@ -83,63 +89,65 @@ class _HouseScreenState extends State<HouseScreen> {
                     }
                   }
 
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      color: apartment.backgroundColor,
-                      elevation: 5,
-                      child: ListTile(
-                        onTap: () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (builder) => ApartmentScreen(
-                                  house: widget.house, apartment: apartment),
-                            ),
-                          );
-                          setState(() {});
-                        },
-                        title: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "🏠  ${apartment.name}",
-                            style: const TextStyle(
-                              fontSize: 25,
-                            ),
-                          ),
-                        ),
-                        subtitle: Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Locataire:",
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                  return OgaGlassContainer(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        color: apartment.backgroundColor,
+                        elevation: 5,
+                        child: ListTile(
+                          onTap: () async {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (builder) => ApartmentScreen(
+                                    house: widget.house, apartment: apartment),
                               ),
-                            ),
-                            Text(occupant?.firstname ?? ""),
-                          ],
-                        ),
-                        trailing: IconButton(
-                          onPressed: () async {
-                            await showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext bc) {
-                                return AddApartment(
-                                  house: _house,
-                                  apartment: apartment,
-                                );
-                              },
-                              isScrollControlled: true,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40.0),
-                              ),
-                            ).then((value) => setState(() {}));
+                            );
+                            setState(() {});
                           },
-                          icon: const Icon(
-                            Icons.update,
-                            size: 40,
+                          title: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "🏠  ${apartment.name}",
+                              style: const TextStyle(
+                                fontSize: 25,
+                              ),
+                            ),
                           ),
-                          color: Colors.white,
+                          subtitle: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Locataire:",
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              Text(occupant?.firstname ?? ""),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            onPressed: () async {
+                              await showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext bc) {
+                                  return AddApartment(
+                                    house: _house,
+                                    apartment: apartment,
+                                  );
+                                },
+                                isScrollControlled: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                ),
+                              ).then((value) => setState(() {}));
+                            },
+                            icon: const Icon(
+                              Icons.update,
+                              size: 40,
+                            ),
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),

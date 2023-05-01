@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oga/helper/helper.dart';
 
+import '../../../helper/oga_colors.dart';
 import '../../../models/occupant.dart';
 
 class OccupantCard extends StatelessWidget {
@@ -21,7 +22,7 @@ class OccupantCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Text(occupant.firstname),
+                  Text(occupant.firstname, style: TextStyle(color: OgaColors.grey1),),
                   const SizedBox(width: 10,),
                   Text(occupant.lastname),
 

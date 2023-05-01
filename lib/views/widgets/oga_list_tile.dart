@@ -26,7 +26,7 @@ class OgaListTile extends StatelessWidget {
                     maxHeight: MediaQuery.of(context).size.width * 0.28,
                   ),
                   child: Container(
-                    color: Colors.red,
+                   // color: Colors.red,
                    //child: widget,
                   ),
                 ),
@@ -57,8 +57,7 @@ class OgaListTile extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 30, 0, 0),
-                      child: Text("kdkkd kdkkkd kkdkkddkk, kdkdkdkk, kdkkd"
-                          "kkd kksk poor iiid kdk",
+                      child: Text(data.desc,
                        // data.desc,
                         style: TextStyle(fontSize: 16, color: OgaColors.grey2),
                       ),

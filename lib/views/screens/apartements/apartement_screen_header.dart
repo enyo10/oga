@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../helper/oga_colors.dart';
 import '../../../models/occupant.dart';
 import '../../../models/rent_period.dart';
 
@@ -16,7 +17,9 @@ class ApartmentScreenHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 0,
+      color: Colors.transparent,
+
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -30,31 +33,31 @@ class ApartmentScreenHeader extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
+                   Text(
                     "Nom:  ",
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 24, color: OgaColors.myLightBlue.shade100),
                   ),
                   Text(
                     occupant?.firstname ?? "",
-                    style: const TextStyle(fontSize: 24),
+                    style:  TextStyle(fontSize: 24, color: OgaColors.lowContrastText),
                   )
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
+                   Text(
                     "Prenom: ",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20,color: OgaColors.myLightBlue.shade100
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       occupant?.lastname ?? "",
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style:  TextStyle(
+                        fontSize: 20, color: OgaColors.lowContrastText
                       ),
                     ),
                   )
@@ -62,13 +65,13 @@ class ApartmentScreenHeader extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     "Loyer: ",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20,color: OgaColors.myLightBlue.shade100),
                   ),
                   Text(
                     '${rent.value} CFA',
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, color: OgaColors.lowContrastText),
                   )
                 ],
               ),

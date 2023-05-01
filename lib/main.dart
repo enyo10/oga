@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Oga',
       theme: ThemeData(
           //scaffoldBackgroundColor: const Color(0xEEE1F5FE),
-        scaffoldBackgroundColor: Colors.transparent,
+        scaffoldBackgroundColor: Colors.white,
 
           primarySwatch: OgaColors.myLightBlue,
           primaryColor: Colors.blue[900],

@@ -7,11 +7,13 @@ class OgaScaffold extends StatelessWidget {
     this.appBar,
     this.floatingActionButton,
     this.resizeToAvoidBottomInset = true,
+    this.backgroundImage,
   });
   final Widget body;
   final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
   final bool resizeToAvoidBottomInset;
+  final String? backgroundImage;
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +36,23 @@ class OgaScaffold extends StatelessWidget {
       ),
     );*/
     return Scaffold(
-      /*appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),*/
-      appBar: appBar??AppBar(backgroundColor: Colors.transparent,),
+      appBar: appBar ??
+          AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
+                    fit: BoxFit.fill),
+              ),
+            ),
+          ),
       floatingActionButton: floatingActionButton,
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               /*gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -52,10 +62,8 @@ class OgaScaffold extends StatelessWidget {
                 ],
               ),*/
               image: DecorationImage(
-                image: AssetImage(
-                  'assets/oga_porte_v.jpg',
-                ),
-                fit: BoxFit.cover,
+                image: AssetImage(backgroundImage ?? 'assets/oga_porte_v.jpg'),
+                fit: BoxFit.fill,
               ),
             ),
             // child: body,
