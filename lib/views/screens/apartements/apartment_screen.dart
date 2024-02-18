@@ -20,11 +20,11 @@ import '../../widgets/number_picker.dart';
 import '../../widgets/oga_scaffold.dart';
 import '../occupants/occupants.dart';
 import '../occupants/occupant_details.dart';
+import 'leaseAppartmentWidget.dart';
 
 class ApartmentScreen extends StatefulWidget {
   const ApartmentScreen(
-      {Key? key, required this.apartment, required this.house, this.year})
-      : super(key: key);
+      {super.key, required this.apartment, required this.house, this.year});
   final Apartment apartment;
   final House house;
   final int? year;
@@ -49,7 +49,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   void initState() {
     super.initState();
     occupantId = widget.apartment.occupantId;
-    apartment = widget.apartment;
+   // apartment = widget.apartment;
     if (widget.year == null) {
       _year = DateTime.now().year;
     }
@@ -60,11 +60,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       'apartment': apartment.toMap(),
       'year': _year
     };
-    const int helloAlarmID = 33;
-
-    /* AndroidAlarmManager.periodic(
-        const Duration(minutes: 1), helloAlarmID, callBack,
-        params: map);*/
     super.initState();
   }
 
@@ -121,7 +116,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                     textTheme: const TextTheme()
                         .apply(bodyColor: OgaColors.myLightBlue.shade100),
                     dividerColor: Colors.white,
-                    iconTheme: IconThemeData(color: OgaColors.myLightBlue.shade100),
+                    iconTheme:
+                        IconThemeData(color: OgaColors.myLightBlue.shade100),
                   ),
                   child: PopupMenuButton<int>(
                     color: OgaColors.myLightBlue.shade100,
@@ -130,10 +126,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                       const PopupMenuItem<int>(
                           value: 1, child: Text("Liste des paiements")),
                       const PopupMenuDivider(),
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 2,
                         child: Row(
-                          children: const [
+                          children: [
                             Icon(
                               Icons.date_range,
                               color: Colors.red,
@@ -197,8 +193,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                       height: MediaQuery.of(context).size.height * 0.2,
                       child: Column(
                         children: [
-                          Row(
-                            children: const [
+                          const Row(
+                            children: [
                               Text(
                                 "Nom:  ",
                                 style: TextStyle(fontSize: 24),
@@ -209,8 +205,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                               )
                             ],
                           ),
-                          Row(
-                            children: const [Text("Prenom: "), Text("")],
+                          const Row(
+                            children: [Text("Prenom: "), Text("")],
                           ),
                           Row(
                             children: [
@@ -328,7 +324,29 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     );
   }
 
-  /* Future<void> _showRemoveOccupantDialog() async {
+  Future<void> _terminateLease() async {
+    CollectionReference houseCollection =
+        FirebaseFirestore.instance.collection('houses');
+    if (_isApartmentOccupied()) {
+      apartment.occupantId == null;
+      for (int i = 0; i < widget.house.apartments.length; i++) {
+        if (widget.house.apartments[i].id == widget.apartment.id) {
+          widget.house.apartments[i].occupantId = null;
+        }
+      }
+
+      await houseCollection
+          .doc(widget.house.id)
+          .update(widget.house.toMap())
+          .then((value) {
+        showMessage(context, "Modification success");
+      }).onError((error, stackTrace) {
+        showMessage(context, error.toString());
+      });
+    }
+  }
+
+  Future<void> _showRemoveOccupantDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -338,9 +356,9 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
             'ATTENTION',
             style: TextStyle(color: Colors.red),
           ),
-          content: SingleChildScrollView(
+          content: const SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
+              children: <Widget>[
                 Text('Le locataire quitte vraiment son logement?'),
               ],
             ),
@@ -355,19 +373,23 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
             TextButton(
               child: const Text('Continuer'),
               onPressed: () async {
-                if (!mounted) return;
+                if (!mounted) {
+                  return;
+                } else {
+                  _terminateLease();
+                }
+                ;
+
                 Navigator.of(context).pop();
-                await _removeOccupantView();
               },
             ),
           ],
         );
       },
     );
-  }*/
+  }
 
-/*
-  Future<void> _removeOccupantView() async {
+  /* Future<void> _removeOccupantView() async {
     await showModalBottomSheet(
       context: context,
       builder: (BuildContext bc) {
@@ -383,8 +405,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
         ),
       ),
     );
-  }
-*/
+  }*/
 
   void _initMonthList() {
     List<Data> list = [];
@@ -416,28 +437,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       }
     }
   }
-
-  @pragma('vm:entry-point')
-  /* static void callback() {
-    var date = DateTime.now();
-    final int isolateId = Isolate.current.hashCode;
-    print(" Current Isole $isolateId");
-
-    print(
-        "Paiement en souffrence. Veuiller régler la situation s'il vous plait");
-    */ /* var index = date.month;
-    var data = monthDataList.elementAt(index - 1);
-    var rent = _getActualRent(data.month);
-    List<Payment> payments = data.payments;
-    var sum = _getSum(payments);
-
-    if (sum < rent.value) {
-      print(
-          "Paiement en souffrence. Veuiller régler la situation s'il vous plait");
-    }else{
-      print(" Tu es à jour ---------");
-    }*/ /*
-  }*/
 
   Widget _monthDataWidget(int index) {
     var data = monthDataList.elementAt(index);
@@ -605,7 +604,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   Future<void> _selectedItem(BuildContext context, item) async {
     switch (item) {
       case 0:
-        await showModalBottomSheet(
+        await _showRemoveOccupantDialog().then((value) => setState(() {
+
+        }));
+        /* await showModalBottomSheet(
           context: context,
           builder: (BuildContext bc) {
             return AddOccupant(
@@ -624,7 +626,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
               _occupant = value;
             },
           ),
-        );
+        );*/
 
         /* _isOccupied()
             ? await _addPayment(
@@ -695,36 +697,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     });
   }
 
-  @pragma('vm:entry-point')
-  static void printHelloBis() {
-    final DateTime now = DateTime.now();
-    final int isolateId = Isolate.current.hashCode;
-    print(
-        "[$now] Hello, Roger! isolate=${isolateId} function='$printHelloBis'");
-  }
 }
 
-/*void callBack(int id, Map<String, dynamic> params) {
-  DateTime actualDate = DateTime.now();
-  print("++++++++++++   callback called  ++++++++++++");
-  var apartment = Apartment.fromMap(params['apartment']);
-  print('++++++++++++  ${apartment.id}       ++++++++++++++++++');
-  List<Data> monthDataList =
-      List<Data>.from(params['monthDataList']!.map((e) => Data.fromMap(e)))
-          .toList();
-  print("-----------   ${monthDataList.length} -------------------------");
 
-  var year = params['year'];
-
-  for (int i = 0; i < monthDataList.length; i++) {
-    Data monthData = monthDataList[i];
-    Rent rent = apartment.rent(year, i + 1);
-    List<Payment> payments = monthData.payments;
-    var sum = payments.fold(
-        0.0, (previousValue, element) => previousValue + element.amount);
-    apartment.rent(1, 2);
-    if (sum < rent.value) {
-      print("++++++++++   Vous nous devez de l'argent   *****************");
-    }
-  }
-}*/

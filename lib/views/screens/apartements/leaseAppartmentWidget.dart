@@ -4,14 +4,13 @@ import 'package:oga/models/apartment.dart';
 import '../../../models/house.dart';
 import '../../../models/occupant.dart';
 
-/*
+
 class LeaseApartmentWidget extends StatefulWidget {
   const LeaseApartmentWidget(
-      {Key? key,
+      {super.key,
       required this.occupant,
       required this.house,
-      required this.apartment})
-      : super(key: key);
+      required this.apartment});
   final Occupant occupant;
   final House house;
   final Apartment apartment;
@@ -56,7 +55,7 @@ class _LeaseApartmentWidgetState extends State<LeaseApartmentWidget> {
                     },
                     child: const Text("Release date"),
                   ),
-                  Text("${leaseDate ?? ''}"),
+                  Text("$leaseDate "),
                 ],
               ),
             )
@@ -84,4 +83,4 @@ class _LeaseApartmentWidgetState extends State<LeaseApartmentWidget> {
     }
   }
 }
-*/
+

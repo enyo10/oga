@@ -10,7 +10,7 @@ import '../../widgets/oga_scaffold.dart';
 import 'add_apartment.dart';
 
 class HouseScreen extends StatefulWidget {
-  const HouseScreen({Key? key, required this.house}) : super(key: key);
+  const HouseScreen({super.key, required this.house});
   final House house;
 
   @override
