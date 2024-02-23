@@ -1,7 +1,4 @@
-import 'dart:isolate';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/apartment.dart';
@@ -20,7 +17,7 @@ import '../../widgets/number_picker.dart';
 import '../../widgets/oga_scaffold.dart';
 import '../occupants/occupants.dart';
 import '../occupants/occupant_details.dart';
-import 'leaseAppartmentWidget.dart';
+import 'terminate_lease.dart';
 
 class ApartmentScreen extends StatefulWidget {
   const ApartmentScreen(
@@ -43,23 +40,16 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   late String? occupantId;
   static String occupantTelNumber = "";
   static late Apartment apartment;
-  static late Map<String, dynamic> map;
 
   @override
   void initState() {
     super.initState();
     occupantId = widget.apartment.occupantId;
-   // apartment = widget.apartment;
-    if (widget.year == null) {
-      _year = DateTime.now().year;
-    }
+    apartment = widget.apartment;
+
+    _initYear();
     _initMonthList();
     _loadPayments();
-    map = {
-      'monthDataList': monthDataList.map((e) => e.toMap()).toList(),
-      'apartment': apartment.toMap(),
-      'year': _year
-    };
     super.initState();
   }
 
@@ -68,40 +58,28 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     Rent rent = widget.apartment.getActualRent();
 
     return OgaScaffold(
-      appBar: occupantId == null
-          ? AppBar(
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: OgaColors.blueButton,
-                ),
-              ),
-            )
-          : AppBar(
-              //backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              flexibleSpace: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
-                      fit: BoxFit.fill),
-                ),
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: OgaColors.myLightBlue.shade100,
-                ),
-              ),
-              actions: [
+      appBar: AppBar(
+        //backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
+                fit: BoxFit.fill),
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: OgaColors.myLightBlue.shade100,
+          ),
+        ),
+        actions: occupantId == null
+            ? []
+            : [
                 IconButton(
                   onPressed: () {
                     _search();
@@ -146,7 +124,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                   ),
                 ),
               ],
-            ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           _isApartmentOccupied()
@@ -315,6 +293,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     );
   }
 
+  void _initYear() {
+    _year = widget.year ?? DateTime.now().year;
+  }
+
   Future<void> _navigateToOccupantDetails() async {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -365,22 +347,21 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Annuler'),
+              child: const Text('Nom'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Continuer'),
+              child: const Text('Oui'),
               onPressed: () async {
                 if (!mounted) {
                   return;
                 } else {
-                  _terminateLease();
+                  Navigator.of(context).pop();
+                  _removeOccupantView();
+                  ;
                 }
-                ;
-
-                Navigator.of(context).pop();
               },
             ),
           ],
@@ -389,23 +370,23 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     );
   }
 
-  /* Future<void> _removeOccupantView() async {
+  Future<void> _removeOccupantView() async {
     await showModalBottomSheet(
       context: context,
       builder: (BuildContext bc) {
-        return LeaseApartmentWidget(
+        return TerminateLease(
             occupant: _occupant!,
             house: widget.house,
             apartment: widget.apartment);
       },
-      backgroundColor: Colors.redAccent,
+      // backgroundColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(40.0),
         ),
       ),
     );
-  }*/
+  }
 
   void _initMonthList() {
     List<Data> list = [];
@@ -604,51 +585,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   Future<void> _selectedItem(BuildContext context, item) async {
     switch (item) {
       case 0:
-        await _showRemoveOccupantDialog().then((value) => setState(() {
-
-        }));
-        /* await showModalBottomSheet(
-          context: context,
-          builder: (BuildContext bc) {
-            return AddOccupant(
-              apartment: widget.apartment,
-              house: widget.house,
-              occupant: _occupant,
-            );
-          },
-          isScrollControlled: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-        ).then(
-          (value) => setState(
-            () {
-              _occupant = value;
-            },
-          ),
-        );*/
-
-        /* _isOccupied()
-            ? await _addPayment(
-                widget.apartment,
-                _occupant!,
-              ).then((value) => setState(() {}))
-            : await showModalBottomSheet(
-                context: context,
-                builder: (BuildContext bc) {
-                  return AddOccupant(
-                    apartment: widget.apartment,
-                    house: widget.house,
-                  );
-                },
-                isScrollControlled: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-              ).then((value) => setState(() {
-                  _occupant = value;
-                }));
-       */
+        await _showRemoveOccupantDialog();
         break;
 
       case 1:
@@ -696,7 +633,4 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       }
     });
   }
-
 }
-
-

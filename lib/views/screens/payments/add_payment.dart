@@ -21,11 +21,10 @@ class AddPayment extends StatefulWidget {
   final Apartment apartment;
 
   const AddPayment(
-      {Key? key,
+      {super.key,
       required this.occupant,
       this.paymentPeriod,
-      required this.apartment})
-      : super(key: key);
+      required this.apartment});
 
   @override
   State<AddPayment> createState() => _AddPaymentState();
@@ -56,7 +55,7 @@ class _AddPaymentState extends State<AddPayment> {
     var paymentPeriod = "${_selectedPeriodDate.month}/"
         "${_selectedPeriodDate.year}";
 
-    var paymentDate = stringValueOfDate(_selectedPeriodDate);
+    // var paymentDate = stringValueOfDate(_selectedPeriodDate);
     _updateImageFromFiles();
     Size size = MediaQuery.of(context).size;
     var pad = size.width * 0.25;
@@ -159,31 +158,32 @@ class _AddPaymentState extends State<AddPayment> {
                       ),
                     ),
                     Visibility(
-                        visible: !_hasPeriod,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, top: 10, right: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    await _showPaymentMontPicker(context);
-                                  },
-                                  child: const Text("Periode de payement")),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  paymentPeriod,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontStyle: FontStyle.normal,
-                                  ),
+                      visible: !_hasPeriod,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8.0, top: 10, right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () async {
+                                  await _showPaymentMontPicker(context);
+                                },
+                                child: const Text("Periode de payement")),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                paymentPeriod,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.normal,
                                 ),
-                              )
-                            ],
-                          ),
-                        )),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 8.0, top: 10, right: 8.0),
@@ -198,11 +198,13 @@ class _AddPaymentState extends State<AddPayment> {
                           const SizedBox(
                             width: 10.0,
                           ),
-                          Text(paymentDate,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontStyle: FontStyle.normal,
-                              ))
+                          Text(
+                            stringValueOfDate(_selectedPaymentDate),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontStyle: FontStyle.normal,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -280,12 +282,13 @@ class _AddPaymentState extends State<AddPayment> {
       context: context,
       initialDate: _selectedPaymentDate,
       firstDate: widget.occupant!.entryDate,
-      lastDate: DateTime(2050),
+      lastDate: DateTime(2080),
     ).then((date) => {
           if (date != null)
             {
               setState(() {
                 _selectedPaymentDate = date;
+                print(" Selected date: ${_selectedPaymentDate.month}");
               })
             }
         });
