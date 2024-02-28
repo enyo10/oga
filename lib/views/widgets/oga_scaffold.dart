@@ -17,28 +17,34 @@ class OgaScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /* return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          // colors: [OgaColors.appbar, OgaColors.notificationButtonBorderColor],
-          // Color(0xFF0D47A1)
-          // Color(0xFF90CAF9), Color(0xFFBBDEFB),Color(0xEEE1F5FE)
-          colors: [Color(0xEEE1F5FE), Color(0xEEE1F5FE)],
-        ),
-      ),
-      child: Scaffold(
-        appBar: appBar,
-        floatingActionButton: floatingActionButton,
-        backgroundColor: Colors.transparent,
-        body: body,
-      ),
-    );*/
+     return Scaffold(
+       extendBodyBehindAppBar: true,
+       appBar: appBar,
+       floatingActionButton: floatingActionButton,
+       body:  Stack(
+       children: [
+         Container(
+           decoration: BoxDecoration(
+
+             image: DecorationImage(
+               image: AssetImage(backgroundImage ?? 'assets/oga_porte_v.jpg'),
+               fit: BoxFit.fill,
+             ),
+           ),
+           // child: body,
+         ),
+         body,
+       ],
+     ),
+     );
+
+
+
+
     return Scaffold(
       appBar: appBar ??
           AppBar(
-            backgroundColor: Colors.transparent,
+           // backgroundColor: Colors.transparent,
             elevation: 0,
             flexibleSpace: Container(
               decoration: const BoxDecoration(

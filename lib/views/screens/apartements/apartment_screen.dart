@@ -58,7 +58,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     Rent rent = widget.apartment.getActualRent();
 
     return OgaScaffold(
-      appBar: AppBar(
+    /*  appBar: AppBar(
         //backgroundColor: Colors.transparent,
         elevation: 0.0,
         flexibleSpace: Container(
@@ -124,7 +124,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                   ),
                 ),
               ],
-      ),
+      ),*/
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           _isApartmentOccupied()
@@ -156,138 +156,134 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
         ),
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: FutureBuilder<DocumentSnapshot>(
-          future: occupants.doc(widget.apartment.occupantId).get(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Column(
-                children: [
-                  Card(
-                    color: Colors.amberAccent,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: Column(
-                        children: [
-                          const Row(
-                            children: [
-                              Text(
-                                "Nom:  ",
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              Text(
-                                "",
-                                style: TextStyle(fontSize: 24),
-                              )
-                            ],
-                          ),
-                          const Row(
-                            children: [Text("Prenom: "), Text("")],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                "Loyer: ",
-                                style: TextStyle(fontSize: 30),
-                              ),
-                              Text(
-                                "${rent.value}",
-                                style: const TextStyle(fontSize: 30),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    child: Card(
-                      child: Center(
-                        child: Text("Something went wrong"),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
-
-            if (snapshot.hasData && !snapshot.data!.exists) {
-              _occupant = null;
-              return Column(
-                children: [
-                  ApartmentScreenHeader(occupant: _occupant, rent: rent),
-                  const Expanded(
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          "Appartement vide",
-                          style: TextStyle(fontSize: 30),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
-
-            if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic> data =
-                  snapshot.data!.data() as Map<String, dynamic>;
-              _occupant = Occupant.fromMap(data);
-              occupantTelNumber = _occupant!.phoneNumber;
-
-              _loadPayments();
-
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 30),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onDoubleTap: () async {
-                        _navigateToOccupantDetails();
-                      },
-                      child: OgaGlassContainer(
-                        child: ApartmentScreenHeader(
-                          occupant: _occupant,
-                          rent: rent,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: FutureBuilder<DocumentSnapshot>(
+        future: occupants.doc(widget.apartment.occupantId).get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Column(
+              children: [
+                Card(
+                  color: Colors.amberAccent,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 20.0),
-                          child: Text(
-                            "Situation en $_year",
-                            style: TextStyle(
-                                fontSize: 20, color: OgaColors.blueButton),
-                          ),
+                        const Row(
+                          children: [
+                            Text(
+                              "Nom:  ",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            Text(
+                              "",
+                              style: TextStyle(fontSize: 24),
+                            )
+                          ],
                         ),
+                        const Row(
+                          children: [Text("Prenom: "), Text("")],
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              "Loyer: ",
+                              style: TextStyle(fontSize: 30),
+                            ),
+                            Text(
+                              "${rent.value}",
+                              style: const TextStyle(fontSize: 30),
+                            )
+                          ],
+                        )
                       ],
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: monthDataList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return OgaGlassContainer(
-                              height: 60.0, child: _monthDataWidget(index));
-                        },
+                  ),
+                ),
+                const Expanded(
+                  child: Card(
+                    child: Center(
+                      child: Text("Something went wrong"),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          if (snapshot.hasData && !snapshot.data!.exists) {
+            _occupant = null;
+            return Column(
+              children: [
+
+                ApartmentScreenHeader(occupant: _occupant, rent: rent),
+                Padding(
+                  padding: const EdgeInsets.only(top: 100),
+                  child: Text(
+                    "Appartement vide",
+                    style: TextStyle(
+                        fontSize: 30, color: OgaColors.myLightBlue.shade100),
+                  ),
+                )
+              ],
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            _occupant = Occupant.fromMap(data);
+            occupantTelNumber = _occupant!.phoneNumber;
+
+            _loadPayments();
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onDoubleTap: () async {
+                      _navigateToOccupantDetails();
+                    },
+                    child: OgaGlassContainer(
+                      child: ApartmentScreenHeader(
+                        occupant: _occupant,
+                        rent: rent,
                       ),
                     ),
-                  ],
-                ),
-              );
-            }
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          "Situation en $_year",
+                          style: TextStyle(
+                              fontSize: 20, color: OgaColors.blueButton),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: monthDataList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return OgaGlassContainer(
+                            height: 60.0, child: _monthDataWidget(index));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
 
-            return const Center(child: Text("loading"));
-          },
-        ),
+          return const Center(child: Text("loading"));
+        },
       ),
       // resizeToAvoidBottomInset: false,
     );

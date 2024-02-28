@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -52,6 +53,7 @@ class HousesState extends DataListScreenState<Houses> {
   @override
   Widget build(BuildContext context) {
     return OgaScaffold(
+
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.symmetric(vertical: 20),
@@ -61,18 +63,17 @@ class HousesState extends DataListScreenState<Houses> {
           ),
 
         ),
-      // backgroundColor: Colors.transparent,
-        elevation: 0,
         centerTitle: true,
         titleTextStyle: GoogleFonts.montserrat(
           fontSize: 30,
-          color: OgaColors.blueButton,
+          color: OgaColors.grey2,
+          //color: OgaColors.greyText7
         ),
         actions: [
           IconButton(
             icon: Icon(
               Icons.person,
-              color: OgaColors.blueButton,
+              color: OgaColors.grey2
             ),
             onPressed: () {
               Navigator.push(
@@ -105,14 +106,10 @@ class HousesState extends DataListScreenState<Houses> {
           )
         ],
         automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
-                fit: BoxFit.fill),
-          ),
-        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
