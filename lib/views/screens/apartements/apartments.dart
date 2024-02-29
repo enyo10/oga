@@ -34,23 +34,18 @@ class _HouseScreenState extends State<HouseScreen> {
     return OgaScaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/oga_porte_v_app_bar.jpg'),
-                fit: BoxFit.fill),
-          ),
-        ),
         elevation: 0,
         centerTitle: true,
         titleTextStyle: appBarTitleTextStyle,
         leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(Icons.arrow_back, color: OgaColors.blueButton)),
-        title: const Text(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back, color: OgaColors.myLightBlue.shade100),
+        ),
+        title: Text(
           "Appartements",
+          style: TextStyle(color: OgaColors.myLightBlue.shade100),
         ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -35,25 +35,12 @@ class HousesState extends DataListScreenState<Houses> {
   void initState() {
     _getPermission();
 
-    /* Messaging.initialize(userId).then((value) {
-      var params = Messaging.params;
-      print(" llllllll lllll maisons  ${Messaging.houses.length}");
-      const int helloAlarmID = 21;
-      AndroidAlarmManager.periodic(
-        const Duration(minutes: 1),
-        helloAlarmID,
-        Messaging.callback,
-        params: params,
-      );
-    });*/
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return OgaScaffold(
-
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.symmetric(vertical: 20),
@@ -61,20 +48,15 @@ class HousesState extends DataListScreenState<Houses> {
             "Maisons",
             //style: TextStyle(color: OgaColors.grey2),
           ),
-
         ),
         centerTitle: true,
         titleTextStyle: GoogleFonts.montserrat(
           fontSize: 30,
-          color: OgaColors.grey2,
-          //color: OgaColors.greyText7
+          color: OgaColors.myLightBlue.shade100,
         ),
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.person,
-              color: OgaColors.grey2
-            ),
+            icon: Icon(Icons.person, color: OgaColors.myLightBlue.shade100),
             onPressed: () {
               Navigator.push(
                 context,
@@ -171,61 +153,23 @@ class HousesState extends DataListScreenState<Houses> {
             padding: const EdgeInsets.only(top: 30),
             child: ListView(
               children: housesList
-                  .map((house) => OgaGlassContainer(
-                            child: OgaListTile(
-                              widget: Text(" hello"),
-                              data: house,
-                            ),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HouseScreen(
-                        house: house,
+                  .map(
+                    (house) => OgaGlassContainer(
+                      child: OgaListTile(
+                        widget: Text(" hello"),
+                        data: house,
                       ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HouseScreen(
+                              house: house,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-                          )
-                      /*Card(
-                        margin: const EdgeInsets.all(8.0),
-                        elevation: 8,
-                        color: house.backgroundColor,
-                        child: ListTile(
-                          leading: Container(
-                            //  color: Colors.white,
-                            child: const Text('🏘',
-                                style: TextStyle(fontSize: 40)),
-                          ),
-                          title: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: AutoSizeText(
-                              " ${house.name}",
-                              style: const TextStyle(fontSize: 24),
-                              maxLines: 1,
-                            ),
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: AutoSizeText(
-                                house.desc,
-                                style: const TextStyle(fontSize: 20),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => HouseScreen(
-                                  house: house,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      )*/
-                      )
+                  )
                   .toList(),
             ),
           );
