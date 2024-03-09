@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -156,7 +155,7 @@ class HousesState extends DataListScreenState<Houses> {
                   .map(
                     (house) => OgaGlassContainer(
                       child: OgaListTile(
-                        widget: Text(" hello"),
+                        widget: const Text(" hello"),
                         data: house,
                       ),
                       onTap: () {

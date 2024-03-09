@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ImageEnlargement extends StatefulWidget {
-  const ImageEnlargement({Key? key, required this.imageUrl}) : super(key: key);
+  const ImageEnlargement({super.key, required this.imageUrl});
   final String? imageUrl;
 
   @override

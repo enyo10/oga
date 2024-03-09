@@ -17,24 +17,23 @@ class OgaScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: appBar,
-      floatingActionButton: floatingActionButton,
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(backgroundImage ?? 'assets/oga_porte_v.jpg'),
-                fit: BoxFit.fill,
-              ),
-            ),
-            // child: body,
-          ),
-          body,
-        ],
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(backgroundImage ?? 'assets/oga_porte_v.jpg'),
+          fit: BoxFit.fill,
+            alignment: Alignment.bottomCenter
+
+        ),
       ),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+
+          resizeToAvoidBottomInset: true,
+
+          appBar: appBar,
+          floatingActionButton: floatingActionButton,
+          body: body),
     );
   }
 }

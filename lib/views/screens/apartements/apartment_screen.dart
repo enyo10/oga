@@ -64,8 +64,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          "Situation en $_year",
-          style: TextStyle(fontSize: 20, color: OgaColors.blueButton),
+          "Etat en $_year",
+          style: TextStyle(fontSize: 20, color: OgaColors.myLightBlue.shade100),
         ),
         leading: BackButton(
           onPressed: () {
@@ -233,7 +233,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
 
             return Column(
               children: [
-                const SizedBox(height: 90,),
                 GestureDetector(
                   onDoubleTap: () async {
                     _navigateToOccupantDetails();
@@ -245,8 +244,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
-
                 Expanded(
                   child: ListView.builder(
                     itemCount: monthDataList.length,
