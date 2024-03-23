@@ -20,11 +20,12 @@ class AddPayment extends StatefulWidget {
   final DateTime? paymentPeriod;
   final Apartment apartment;
 
-  const AddPayment(
-      {super.key,
-      required this.occupant,
-      this.paymentPeriod,
-      required this.apartment});
+  const AddPayment({
+    super.key,
+    required this.occupant,
+    this.paymentPeriod,
+    required this.apartment,
+  });
 
   @override
   State<AddPayment> createState() => _AddPaymentState();
@@ -54,8 +55,6 @@ class _AddPaymentState extends State<AddPayment> {
   Widget build(BuildContext context) {
     var paymentPeriod = "${_selectedPeriodDate.month}/"
         "${_selectedPeriodDate.year}";
-
-    // var paymentDate = stringValueOfDate(_selectedPeriodDate);
     _updateImageFromFiles();
     Size size = MediaQuery.of(context).size;
     var pad = size.width * 0.25;
@@ -302,7 +301,7 @@ class _AddPaymentState extends State<AddPayment> {
     }
   }
 
-  _initPaymentPeriod() {
+  void _initPaymentPeriod() {
     if (widget.paymentPeriod != null) {
       _selectedPeriodDate = widget.paymentPeriod!;
       _hasPeriod = true;
@@ -311,13 +310,14 @@ class _AddPaymentState extends State<AddPayment> {
     }
   }
 
-  _onRemoveImage(int index) {
+
+  void _onRemoveImage(int index) {
     setState(() {
       _files.removeAt(index);
     });
   }
 
-  _updateImageFromFiles() {
+  void _updateImageFromFiles() {
     _imagesItems.clear();
     if (_files.isNotEmpty) {
       for (int i = 0; i < _files.length; i++) {

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/apartment.dart';
 import 'package:oga/models/occupant.dart';
@@ -40,13 +39,11 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   DateTime? leaseDate;
   late String? occupantId;
   static String occupantTelNumber = "";
-  static late Apartment apartment;
 
   @override
   void initState() {
     super.initState();
     occupantId = widget.apartment.occupantId;
-    apartment = widget.apartment;
 
     _initYear();
     _initMonthList();
@@ -277,7 +274,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
     );
   }
 
-  Future<void> _terminateLease() async {
+ /* Future<void> _terminateLease() async {
     CollectionReference houseCollection =
         FirebaseFirestore.instance.collection('houses');
     if (_isApartmentOccupied()) {
@@ -297,7 +294,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
         showMessage(context, error.toString());
       });
     }
-  }
+  }*/
 
   Future<void> _showRemoveOccupantDialog() async {
     return showDialog<void>(
@@ -518,6 +515,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   }
 
   Future<void> _addPayment(Apartment apartment, Occupant? occupant) async {
+
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AddPayment(
@@ -535,6 +533,7 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       occupant: _occupant!,
       apartment: widget.apartment,
       data: data,
+      actualYear: _year,
     );
 
     await Navigator.of(context).push(
@@ -589,11 +588,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       context: context,
       builder: (context) {
         return SizedBox(
-            height: 400,
-            child: PickedNumber(
-              currentValue: _year,
-              minValue: _occupant!.entryDate.year,
-            ));
+          height: 400,
+          child: PickedNumber(
+            currentValue: _year,
+            minValue: _occupant!.entryDate.year,
+          ),
+        );
       },
     ).then((value) {
       if (value != null) {

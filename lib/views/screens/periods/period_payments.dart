@@ -6,7 +6,6 @@ import 'package:oga/models/apartment.dart';
 import '../../../helper/helper.dart';
 import '../../../models/occupant.dart';
 import '../../../models/payment.dart';
-import '../../../models/period.dart';
 import '../payments/add_payment.dart';
 import '../payments/payment_list_tile.dart';
 
@@ -15,14 +14,16 @@ class PeriodPayments extends StatefulWidget {
   final Occupant occupant;
   final Apartment apartment;
   final Data data;
+  final int actualYear;
 
   const PeriodPayments({
-    Key? key,
+    super.key,
     required this.payments,
     required this.occupant,
     required this.apartment,
     required this.data,
-  }) : super(key: key);
+    required this.actualYear,
+  });
 
   @override
   State<PeriodPayments> createState() => _PeriodPaymentsState();
@@ -44,10 +45,11 @@ class _PeriodPaymentsState extends State<PeriodPayments> {
 
   @override
   Widget build(BuildContext context) {
-    int year = DateTime.now().year;
+    //int year = DateTime.now().year;
+    //  int year = widget.actualYear;
     var monthInt = widget.data.month;
     var month = monthMap[monthInt];
-    var rent = widget.apartment.rent(year, monthInt).value;
+    var rent = widget.apartment.rent(widget.actualYear, monthInt).value;
     double height = MediaQuery.of(context).size.height * 0.10;
     return Scaffold(
       appBar: AppBar(
@@ -68,8 +70,10 @@ class _PeriodPaymentsState extends State<PeriodPayments> {
               MaterialPageRoute(
                 builder: (context) => AddPayment(
                   occupant: widget.occupant,
-                  //  initialPaymentPeriodDate: widget.occupant.entryDate,
-                  paymentPeriod: DateTime(year, widget.data.month),
+                  paymentPeriod: DateTime(
+                    widget.actualYear,
+                    widget.data.month,
+                  ),
                   apartment: widget.apartment,
                 ),
                 fullscreenDialog: false,
@@ -118,7 +122,8 @@ class _PeriodPaymentsState extends State<PeriodPayments> {
 
   Future<void> _loadData() async {
     var month = widget.data.month;
-    var year = DateTime.now().year;
+    // var year = DateTime.now().year;
+    var year = widget.actualYear;
     List<Payment> list = [];
     for (var payment in widget.occupant.payments) {
       if (payment.paymentPeriod.year == year &&
@@ -131,20 +136,6 @@ class _PeriodPaymentsState extends State<PeriodPayments> {
       totalAmount = getTotalAmount(payments);
       _isLoading = false;
     });
-  }
-
-  _addPayment() {
-    int year = DateTime.now().year;
-    showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return AddPayment(
-            occupant: widget.occupant,
-            //  initialPaymentPeriodDate: widget.occupant.entryDate,
-            paymentPeriod: DateTime(year, widget.data.month),
-            apartment: widget.apartment,
-          );
-        });
   }
 
   bool _isBalanced() {
@@ -160,10 +151,8 @@ class _PeriodPaymentsState extends State<PeriodPayments> {
     var date = DateTime(DateTime.now().year, widget.data.month);
     var entryDate = widget.occupant.entryDate;
     if (date.year == entryDate.year && date.month == entryDate.month) {
-      print(" Equality ");
       return true;
     }
-    print(" date $date    entry $entryDate");
 
     return date.isAfter(entryDate);
   }
