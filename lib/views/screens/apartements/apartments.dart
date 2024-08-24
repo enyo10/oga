@@ -43,9 +43,12 @@ class _HouseScreenState extends State<HouseScreen> {
           },
           icon: Icon(Icons.arrow_back, color: OgaColors.myLightBlue.shade100),
         ),
-        title: Text(
-          "Appartements",
-          style: TextStyle(color: OgaColors.myLightBlue.shade100),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Text(
+            _house.name,
+            style: TextStyle(color: OgaColors.myLightBlue.shade100),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

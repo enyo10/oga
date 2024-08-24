@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 class DataListScreen extends StatefulWidget {
   final String collectionName;
-  const DataListScreen({Key? key, required this.collectionName})
-      : super(key: key);
+  const DataListScreen({super.key, required this.collectionName});
 
   @override
   State<DataListScreen> createState() => DataListScreenState();
