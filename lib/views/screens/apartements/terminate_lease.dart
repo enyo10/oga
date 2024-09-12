@@ -38,15 +38,17 @@ class _TerminateLeaseState extends State<TerminateLease> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 80),
         child: ElevatedButton(
-          onPressed: () {
-
+          onPressed: () async {
             print("Will be done");
+
+            await _terminateLease()
+                .then((value) => Navigator.of(context).pop());
           },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
           ),
           child: const Text(
-            "Ajouter",
+            "Valider",
             style: TextStyle(
               fontSize: 25.0,
             ),
@@ -68,7 +70,14 @@ class _TerminateLeaseState extends State<TerminateLease> {
                     },
                     child: const Text("Release date"),
                   ),
-                  Text("$leaseDate "),
+                  Text(
+                    stringValueOfDate(leaseDate),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontStyle: FontStyle.normal,
+                    ),
+                  )
+                  // Text("$leaseDate "),
                 ],
               ),
             )
@@ -96,9 +105,9 @@ class _TerminateLeaseState extends State<TerminateLease> {
     }
   }
 
-  Future<void>_setRemovedId() async {
+  /*Future<void> _setRemovedId() async {
     CollectionReference houseCollection =
-    FirebaseFirestore.instance.collection('houses');
+        FirebaseFirestore.instance.collection('houses');
 
     widget.apartment.occupantId == null;
     for (int i = 0; i < widget.house.apartments.length; i++) {
@@ -115,7 +124,7 @@ class _TerminateLeaseState extends State<TerminateLease> {
     }).onError((error, stackTrace) {
       showMessage(context, error.toString());
     });
-  }
+  }*/
 
   Future<void> _terminateLease() async {
     CollectionReference houseCollection =
@@ -138,7 +147,7 @@ class _TerminateLeaseState extends State<TerminateLease> {
     });
   }
 
-  _updateOccupant() async {
+  /*_updateOccupant() async {
     CollectionReference occupantsCollection =
         FirebaseFirestore.instance.collection('occupants');
     widget.occupant.releaseDate = leaseDate;
@@ -151,5 +160,5 @@ class _TerminateLeaseState extends State<TerminateLease> {
     }).onError((error, stackTrace) {
       showMessage(context, error.toString());
     });
-  }
+  }*/
 }
