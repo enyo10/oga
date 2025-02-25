@@ -424,14 +424,16 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   }
 
   bool _isVisible(int index, List<Payment> payments) {
-    var actualYear = DateTime.now();
-    var actualMonth = actualYear.month;
+    var actualDate = DateTime.now();
 
-    if (_year < actualYear.year) {
-      return true;
+    var selectedYearDate = DateTime(_year, index);
+    var entryDate = _occupant!.entryDate;
+
+    if (selectedYearDate.isBefore(entryDate) || _year > actualDate.year) {
+      return false;
     }
 
-    if (index < actualMonth || payments.isNotEmpty) {
+    if (index < actualDate.month || payments.isNotEmpty) {
       return true;
     } else {
       return false;
@@ -439,10 +441,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   }
 
   bool _isPeriodOK(int index, List<Payment> payments) {
-    var actualYear = DateTime.now();
-    var actualMonth = actualYear.month;
+    var actualDate = DateTime.now();
+    var actualMonth = actualDate.month;
 
-    if (_year < actualYear.year) {
+    if (_year < actualDate.year) {
       return true;
     }
 
