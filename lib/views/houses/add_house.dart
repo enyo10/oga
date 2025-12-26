@@ -6,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
-//import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import 'package:oga/helper/oga_colors.dart';
 
 import 'package:path/path.dart' as path;
@@ -82,19 +81,7 @@ class _AddHouseState extends State<AddHouse> {
                   ),
                 ),
               ),
-              /*child: ElevatedButton(
-                onPressed: () async {
-                  await _addHouse()
-                      .then((value) => Navigator.of(context).pop());
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                ),
-                child: const Text(
-                  "Ajouter",
-                  style: TextStyle(fontSize: 25),
-                ),
-              ),*/
+
             ),
           ],
         ),
