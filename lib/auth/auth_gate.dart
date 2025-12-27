@@ -3,7 +3,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../helper/helper.dart';
-import '../views/houses/house_list_view.dart';
+import '../views/houses/houses_list_view.dart';
 
 
 class AuthGate extends StatelessWidget {

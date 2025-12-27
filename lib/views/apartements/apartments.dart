@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../helper/oga_colors.dart';
 import '../../../helper/oga_style.dart';
 import '../../../models/house.dart';
@@ -68,31 +69,85 @@ class _HouseScreenState extends State<HouseScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.only(top: 40),
-        child: count == 0
-            ? Center(
-                child: Text(
-                  " Pas de donnée",
-                  style: TextStyle(fontSize: 30, color: OgaColors.whiteText1),
-                ),
-              )
-            : ListView.builder(
-                itemCount: widget.house.apartments.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var apartment = widget.house.apartments[index];
-                  Occupant? occupant;
+        child:
+            count == 0
+                ? Center(
+                  child: Text(
+                    " Pas de donnée",
+                    style: TextStyle(fontSize: 30, color: OgaColors.whiteText1),
+                  ),
+                )
+                : ListView.builder(
+                  itemCount: widget.house.apartments.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var apartment = widget.house.apartments[index];
+                    Occupant? occupant;
 
-                  for (Occupant o in _occupants) {
-                    if (o.id == apartment.occupantId) {
-                      occupant = o;
+                    for (Occupant o in _occupants) {
+                      if (o.id == apartment.occupantId) {
+                        occupant = o;
+                      }
                     }
-                  }
 
-                  return OgaGlassContainer(
+                    return OgaGlassContainer(
+                      onTap: () async {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (builder) => ApartmentScreen(
+                                  house: widget.house,
+                                  apartment: apartment,
+                                ),
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "🏠  ${apartment.name}",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 40,
+                                color: OgaColors.myLightBlue.shade100,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Locataire:",
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 25,
+                                    fontStyle: FontStyle.italic,
+                                    color: OgaColors.myLightBlue.shade100,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                occupant?.firstname ?? "",
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 30,
+                                  fontStyle: FontStyle.italic,
+                                  color: OgaColors.myLightBlue.shade100,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      /*
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        color: apartment.backgroundColor,
-                        elevation: 5,
+
+                      child: Center(
                         child: ListTile(
                           onTap: () async {
                             await Navigator.of(context).push(
@@ -148,23 +203,25 @@ class _HouseScreenState extends State<HouseScreen> {
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    ),*/
+                    );
+                  },
+                ),
       ),
       resizeToAvoidBottomInset: true,
     );
   }
 
   Future<void> _loadOccupants() async {
-    CollectionReference occupants =
-        FirebaseFirestore.instance.collection('occupants');
+    CollectionReference occupants = FirebaseFirestore.instance.collection(
+      'occupants',
+    );
 
     await occupants.get().then((value) {
-      _occupants = value.docs
-          .map((e) => Occupant.fromMap(e.data() as Map<String, dynamic>))
-          .toList();
+      _occupants =
+          value.docs
+              .map((e) => Occupant.fromMap(e.data() as Map<String, dynamic>))
+              .toList();
     });
     setState(() {});
   }

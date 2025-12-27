@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/house.dart';
@@ -42,7 +41,7 @@ class HousesListViewState extends DataListScreenState<HousesListView> {
           padding: EdgeInsets.symmetric(vertical: 20),
           child: Text(
             "Maisons",
-            //style: TextStyle(color: OgaColors.grey2),
+            style: TextStyle(fontSize: 30),
           ),
         ),
         centerTitle: true,
@@ -146,10 +145,7 @@ class HousesListViewState extends DataListScreenState<HousesListView> {
                   housesList
                       .map(
                         (house) => OgaGlassContainer(
-                          /*child: OgaListTile(
-                            widget: const Text(" hello"),
-                            data: house,
-                          ),*/
+
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -171,10 +167,15 @@ class HousesListViewState extends DataListScreenState<HousesListView> {
                                 ),
                               ),
                               SizedBox(height: 10),
-                              Center(child: Text(house.desc,  style: GoogleFonts.montserrat(
-                                fontSize: 20,
-                                color: OgaColors.myLightBlue.shade100,
-                              ),))
+                              Center(
+                                child: Text(
+                                  house.desc,
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 20,
+                                    color: OgaColors.myLightBlue.shade100,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
