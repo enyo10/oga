@@ -27,6 +27,8 @@ class Apartment {
             .toList(),
         occupantId = mapData['occupantId'];
 
+
+
   Map<String, dynamic> toMap() {
     return {
       "id": id,
