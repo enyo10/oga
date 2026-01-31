@@ -302,7 +302,7 @@ class _AddPaymentState extends State<AddPayment> {
           {
             setState(() {
               _selectedPaymentDate = date;
-              print(" Selected date: ${_selectedPaymentDate.month}");
+
             }),
           },
       },

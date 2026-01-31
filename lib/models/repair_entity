@@ -1,0 +1,45 @@
+
+class RepairEntity {
+  final String id;
+  final String houseId;
+  String? apartmentId;
+  final String objet;
+  final String description;
+  final DateTime startDate;
+  DateTime? endDate;
+  String repairman;
+  double repairCost;
+  RepairStatus status;
+
+  RepairEntity({
+    required this.id,
+    this.apartmentId,
+    required this.objet,
+    required this.description,
+    required this.startDate,
+    required this.repairman,
+    this.endDate,
+    this.repairCost = 0,
+    this.status = RepairStatus.onHold,
+    required this.houseId,
+  });
+}
+
+enum RepairStatus {
+  onHold("onHold", "En attente"),
+  inProgress("inProgress", "En cours"),
+  ended("ended", "Terminée");
+
+  final String key;
+  final String label;
+
+  const RepairStatus(this.key, this.label);
+
+  static RepairStatus fromKey(String key) {
+    return RepairStatus.values.firstWhere((status) => status.key == key);
+  }
+}
+
+
+
+

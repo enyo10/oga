@@ -1,10 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
-import 'package:image_picker/image_picker.dart';
+/*
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -181,3 +175,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+*/

@@ -101,11 +101,10 @@ class _AddOccupantState extends State<AddOccupant> {
                 await _storeDocumentAndSaveOccupant().then(
                   (value) => Navigator.of(context).pop(_occupant),
                 );
-                /*if (!mounted) return;
-                Navigator.of(context).pop(_occupant);*/
+
               }
             },
-            //   icon: const Icon(Icons.send),
+
             label: Text(buttonLabel, style: const TextStyle(fontSize: 22)),
           ),
         ),

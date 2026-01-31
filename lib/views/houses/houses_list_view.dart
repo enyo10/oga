@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/helper/oga_colors.dart';
 import 'package:oga/models/house.dart';
-import 'package:oga/views/houses/house_view.dart';
+import 'package:oga/views/apartments/apartments.dart';
 import 'package:oga/views/screens/data_list.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-
 import '../../widgets/oga_glass_container.dart';
 import '../../widgets/oga_scaffold.dart';
 import 'add_house.dart';
@@ -149,7 +148,7 @@ class HousesListViewState extends DataListScreenState<HousesListView> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => HouseView(house: house),
+                                builder: (context) => HouseScreen(house: house),
                               ),
                             );
                           },

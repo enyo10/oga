@@ -106,20 +106,7 @@ class _AddApartmentState extends State<AddApartment> {
                       ),
                     ),
                   ),
-              /*    Visibility(
-                    visible: widget.apartment == null,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        controller: _addressController,
-                        decoration: const InputDecoration(
-                          hintText: 'Address',
-                          labelText: 'Address',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),*/
+
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -325,7 +312,6 @@ class _AddApartmentState extends State<AddApartment> {
     if (widget.apartment != null) {
       _nameController.text = widget.apartment!.name;
       _descriptionController.text = widget.apartment!.description;
-      //_addressController.text = widget.apartment!.;
       _rentController.text = widget.apartment!.getActualRent().value.toString();
     }
   }

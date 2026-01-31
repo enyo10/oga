@@ -7,6 +7,7 @@ import '../../../models/house.dart';
 import '../../../models/occupant.dart';
 import '../../widgets/oga_glass_container.dart';
 import '../../widgets/oga_scaffold.dart';
+import '../houses/house_info.dart';
 import 'add_apartment.dart';
 import 'apartment_screen.dart';
 
@@ -44,6 +45,21 @@ class _HouseScreenState extends State<HouseScreen> {
           },
           icon: Icon(Icons.arrow_back, color: OgaColors.myLightBlue.shade100),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => HouseInfoView(house: _house),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.info_outline,
+              color: OgaColors.myLightBlue.shade100,
+            ),
+          ),
+        ],
         title: Padding(
           padding: const EdgeInsets.only(top: 20),
           child: Text(

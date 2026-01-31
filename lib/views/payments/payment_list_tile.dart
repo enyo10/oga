@@ -55,7 +55,7 @@ class _PaymentListTileState extends State<PaymentListTile> {
   }
 
   /* Widget _paymentWidget(Payment payment) {
-    var info = (payment.desc == '') ? " " : "i";
+    var repair = (payment.desc == '') ? " " : "i";
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -68,7 +68,7 @@ class _PaymentListTileState extends State<PaymentListTile> {
           MyTextWidget(text: "${payment.amount} ${payment.currency}"),
           MyTextWidget(text: payment.rate.toString()),
           MyTextWidget(text: stringValue(payment.paymentDate)),
-          MyTextWidget(text: info),
+          MyTextWidget(text: repair),
         ],
       ),
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oga/models/house.dart';
-import 'package:oga/views/apartements/apartments.dart';
+import 'package:oga/views/apartments/apartments.dart';
+import 'package:oga/views/houses/house_info.dart';
 import 'package:oga/widgets/oga_glass_container.dart';
 import 'package:oga/widgets/oga_scaffold.dart';
 
@@ -58,6 +59,13 @@ class HouseView extends StatelessWidget {
             ),
             SizedBox(height: 40),
             OgaGlassContainer(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HouseInfoView(house: house,),
+                  ),
+                );
+              },
               child: Center(
                 child: Text(
                   "Informations sur la maison",

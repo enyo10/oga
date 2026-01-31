@@ -40,7 +40,7 @@ class _OccupantDetailsState extends State<OccupantDetails> {
           icon: const Icon(Icons.arrow_back),
           color: OgaColors.myLightBlue.shade100,
         ),
-        title: const Text("Locataire info"),
+        title: const Text("Locataire repair"),
         titleTextStyle: appBarTitleTextStyle,
         backgroundColor: Colors.transparent,
         elevation: 0,
